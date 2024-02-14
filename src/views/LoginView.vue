@@ -1,0 +1,267 @@
+<template>
+    <div class="login_c">
+        <section class="logo_c">
+            <img src="../assets/logo.png" alt="" id="logo">  
+            <h2>TASKWING</h2>
+            <h4>Turn your ideas into achievements</h4>
+                <section class="social_login_c">
+                <div class="container_login facebook">
+                    <i class="fa-brands fa-square-facebook"></i>
+                    <h3 id="login_text">Login with Facebook</h3>
+                </div>
+                <div class="container_login google">
+                    <i class="fa-brands fa-square-google-plus"></i>
+                    <h3 id="login_text">Login with Google</h3>
+                </div>
+                </section>
+        </section>
+        <!-- Container derecho -->
+        <section class="right_c">
+            <div class="user_title_c">
+                <img src="../assets/user.png" alt="" id="user_img">
+                <h1 id="user_title">User login</h1>
+            </div>
+             <div class="input_main_c">
+                <div class="input_c">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" name="" id="" placeholder="Email"  class="input" >
+            </div>
+            <div class="input_c">
+                <i class="fa-solid fa-key"></i>
+                <input type="password" name="" id="" placeholder="Password" class="input">
+            </div>
+        <div class="forgotp_remember_c">
+            <div id="remember_c">
+                <input type="checkbox">
+                <p id="remember">Remeber me</p>
+            </div>
+            <p id="forgot">Forgot password?</p>
+        </div>
+            </div>
+            
+        <div class="btn_c">
+            <button id="login_btn">Login</button>
+            <p>Create account</p>
+        </div>
+        </section>
+    
+
+    </div>
+</template>
+
+<script setup>
+
+</script>
+``
+<style scoped>
+
+.login_c{
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+/*     border: 1px solid green; */
+    height: 100vh;
+    justify-content: space-around;
+}
+.logo_c{
+    display: flex;
+    flex-direction: column;
+/*     border: 1px solid red; */
+    align-items: center;
+    gap: 8px;
+}
+h2{
+    font-family: var(--font1);
+    font-size: 40px;
+    font-weight: 300;
+    font-style: normal;
+    color: #646464;
+}
+h4{
+    font-family: "Just Me Again Down Here", cursive;
+    font-weight: 200;
+    font-size: 22px;
+    color: #717171;
+    letter-spacing: 3px;
+}
+#logo{
+    width: 131px;
+    transform: rotate(10deg);
+}
+.social_login_c{
+/*     border: 1px solid brown; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+}
+
+.container_login{
+    width: 309px;
+    height: 54px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: var(--boxshadow);
+
+}
+
+.facebook{
+        background-color: #F3BC47;
+}
+.facebook:active{
+        background-color: #ebdec1; 
+}
+.google{
+        background-color: #C32E3B;
+        color: white;
+}
+.google:active{
+       background-color: #c58489;  
+}
+.container_login:hover{
+    cursor: pointer;
+}
+.fa-square-facebook{
+    color: #373737;
+}
+i{
+        font-size: 40px;
+}
+#login_text{
+    font-family: var(--font1);
+    font-size: 16px;
+    font-weight: 200;
+}
+.right_c{
+        display: none;
+    }
+/* CONTENEDOR DERECHO LOGIN */
+.input_c{
+    width: 80%;
+    height: 65px;
+    background-color: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 30px!important;
+}
+.input_c i {
+    font-size: 25px;
+    color: #454545;
+}
+.input{
+    width: 80%;
+    height: 50%;
+    font-size: 20px;
+    border: none;
+        font-family: var(--font1);
+        font-weight: 200;
+        cursor: pointer;
+        user-select: none;
+}
+.input:focus{
+    outline: none;
+}
+.user_title_c{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+#user_title{
+    font-family: var(--font1);
+    font-weight: 200;
+    font-size: 45px;
+    color: #454545;
+}
+#user_img{
+    width: 107px;
+}
+.input_main_c{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.forgotp_remember_c{
+    display: flex;
+    justify-content: space-between;
+    width: 76%;
+    margin-top: 10px!important;
+}
+#remember_c{
+    display: flex;
+    gap: 5px;
+    font-family: var(--font1);
+    font-weight: 300;
+
+}
+#forgot{
+    font-family: var(--font1);
+    font-style: italic;
+    font-weight: 200;
+}
+#forgot:hover{
+    color: #3f3e3e;
+    cursor: pointer;
+}
+#login_btn{
+    width: 60%;
+    height: 60px;
+    background-color: #C32E3B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    font-family: var(--font1);
+    font-weight: 200;
+    
+}
+#login_btn:hover{
+ background-color: #c2404b;   
+ cursor: pointer;
+}
+.btn_c{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+.btn_c p{
+    font-family: var(--font1);
+    font-size: 14px;
+    font-weight: 300;
+}
+.btn_c p:hover{
+    color: #474747;
+    cursor: pointer;
+}
+@media (min-width:1000px){
+    .login_c{
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .logo_c{
+/*         border: 1px solid red; */
+        width: 950px;
+        align-items: center;
+        justify-content: center;
+    }
+    .right_c{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #F3BC47;
+        height: 100vh;
+        width: 600px;
+    }
+}
+</style>
