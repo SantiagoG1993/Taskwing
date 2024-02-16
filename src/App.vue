@@ -1,13 +1,15 @@
 <template>
   <div>
     <!-- <LoadingView /> -->
-    <LoginView />
+    <!-- <LoginView /> -->
+    <IndexView />
   </div>
 </template>
 
 <script setup>
 /* import LoadingView from './views/LoadingView.vue' */
 import LoginView from '../src/views/LoginView.vue'
+import IndexView from  '../src/views/IndexView.vue'
 
 </script>
 
