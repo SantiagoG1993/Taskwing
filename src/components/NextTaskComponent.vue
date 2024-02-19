@@ -1,5 +1,5 @@
 <template>
-    <div  class="main_container">
+    <div  class="main_container_next_task">
         <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">12:50h</span></h3>
         <div class="nextTask_c">
             <h2 id="taskName">Pasear al perro</h2>
@@ -18,7 +18,7 @@
 </script>
 
 <style scoped>
-.main_container{
+.main_container_next_task{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -28,13 +28,14 @@
 .nextTask_c{
     user-select: none;
     width: 95%;
-    height: 50px;
+    height: 60px;
     background-color: #4EAC94 ;
     border-radius: 4px;
     box-shadow: var(--boxshadow);
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 6px;
 }
 .clock2{

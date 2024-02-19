@@ -1,6 +1,24 @@
 <template>
-    <div class="main_component">
-<Task />
+    <div class="main_component"> 
+        <div class="filters_c">
+            <h3 id="category_selected">All <i class="fa-solid fa-angle-down"></i></h3>
+            <h3 id="category_selected">Today <i class="fa-solid fa-angle-down"></i></h3>
+        </div>
+        <div class="today_c">
+            <h2 class="today">Today</h2>
+            <Task />
+            <Task />
+        </div>
+        <div class="today_c">
+            <h2 class="today">Tomorrow</h2>
+            <Task />
+            <Task />
+        </div>
+        <div class="today_c">
+            <h2 class="today">Other</h2>
+            <Task />
+            <Task />
+        </div>
     </div>
 </template>
 
@@ -10,10 +28,50 @@ import Task from '../components/Task.vue'
 
 <style scoped>
 .main_component{
-/*     border: 3px solid yellow; */
-    height: 500px;
+/* background-color: rgb(234, 234, 234); */
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 20px!important;
+}
+.today_c{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.today{
+    font-family: var(--font2);
+    font-weight: 200;
+    font-size: 16px;
+    margin-bottom: 10px!important;
+    align-self: flex-start;
+    margin-left: 45px!important;
+}
+#category_selected{
+    font-family: var(--font1);
+    align-self: flex-start;
+    font-weight: 300;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.fa-angle-down{
+    font-size: 15px;
+    padding-top: 5px!important;
+}
+.fa-angle-down:hover{
+    color: grey;
+    cursor: pointer;
+}
+.filters_c{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px 0px 40px!important;
 }
 </style>
