@@ -12,14 +12,20 @@
             <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
             <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
         </section>
-        <div class="edit_task_btn">
+        <div class="edit_task_btn" @click="editTaskIsOpen = true">
             <i class="fa-solid fa-pencil"></i>
+        </div>
+        <div v-if="editTaskIsOpen == true">
+            <EditTask @close-edit-task="editTaskIsOpen = false" />
         </div>
     </div>
 </template>
 
 <script setup>
-import {defineEmits} from 'vue';
+import {defineEmits, ref} from 'vue';
+import EditTask from '../components/EditTask.vue';
+
+const editTaskIsOpen = ref(false)
 
 const emit = defineEmits(['close-info'])
 

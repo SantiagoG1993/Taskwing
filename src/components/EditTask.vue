@@ -1,9 +1,9 @@
 <template>
-    <div class="addTask_main_container">
-         <section class="upper_menu">
+    <div class="edit_task_main_container">
+        <section class="upper_menu">
                 <i class="fa-solid fa-arrow-left" @click = 'handleClick' ></i>
-                <h2 id="info_title"> Add new task </h2>
-        </section>  
+                <h2 id="info_title">Edit task</h2>
+        </section>
         <form action="" class="addtask_form">
             <label for="title">What is to be done?</label>
                 <input type="text" placeholder="Enter task here" class="input_text">
@@ -36,28 +36,27 @@
 <script setup>
 import {defineEmits} from 'vue';
 
+const emit = defineEmits(['close-edit-task'])
 
-const emit = defineEmits(['close-add-task'])
-
-const handleClick  = ()=>{
-    emit('close-add-task')
+const handleClick = ()=>{
+    emit('close-edit-task')
 }
-
-
 </script>
 
 <style scoped>
-.addTask_main_container{
+.edit_task_main_container{
     width: 100%;
     height: 100vh;
     z-index: 1000;
     background-color: var(--color1);
     position: fixed;
     top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 .upper_menu{
     height: 60px;
@@ -80,8 +79,6 @@ background-color: #E78231;
     font-size: 18px;
     margin-left: 25px!important;
 }
-/* Form */
-
 .addtask_form{
     display: flex;
     flex-direction: column;

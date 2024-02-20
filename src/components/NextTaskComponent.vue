@@ -9,6 +9,7 @@
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
             </section>
         </div>
+            <hr>
     
     </div>
 </template>
@@ -75,5 +76,19 @@
 }
 .clock1 {
     color: black;
+}
+@media (min-width:1000px){
+    .main_container_next_task{
+        width: 72%;
+        align-self: center;
+    }
+    .nextTask_c{
+        height: 50px;
+    }
+    hr{
+        width: 100%;
+        color: rgb(255, 255, 255);
+        margin-top: 20px!important;
+    }
 }
 </style>

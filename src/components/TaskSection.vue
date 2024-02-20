@@ -8,17 +8,23 @@
             <h2 class="today">Today</h2>
             <Task />
             <Task />
+            <Task />
         </div>
+        <hr>
         <div class="today_c">
             <h2 class="today">Tomorrow</h2>
             <Task />
             <Task />
+            <Task />
         </div>
+        <hr>
         <div class="today_c">
             <h2 class="today">Other</h2>
             <Task />
             <Task />
+            <Task />
         </div>
+        
     </div>
 </template>
 
@@ -37,19 +43,26 @@ import Task from '../components/Task.vue'
 }
 .today_c{
     width: 100%;
+    min-height: 200px!important;
+    margin-bottom: 10px!important;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-}
+/*     position: relative; */
+/*     border: 1px solid red;
+ */}
 .today{
     font-family: var(--font2);
     font-weight: 200;
     font-size: 16px;
-    margin-bottom: 10px!important;
     align-self: flex-start;
-    margin-left: 45px!important;
+    margin-left: 20px!important;
+    margin-bottom: 10px!important;
+    margin-top: 5px!important;
+}
+hr{
+    display: none;
 }
 #category_selected{
     font-family: var(--font1);
@@ -73,5 +86,32 @@ import Task from '../components/Task.vue'
     display: flex;
     justify-content: space-between;
     padding: 20px 40px 0px 40px!important;
+}
+@media (min-width: 1000px){
+
+.main_component{
+    margin-top: 70px!important;
+}
+    .today_c{
+    flex-direction: row;
+    width: 70%;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    }
+}
+hr{
+    width: 80%;
+    color: rgb(255, 255, 255);
+}
+/* .today{
+    font-family: var(--font2);
+    font-weight: 300;
+    font-size: 16px;
+    position: absolute;
+    left: -30px;
+} */
+#category_selected{
+    display: none;
 }
 </style>

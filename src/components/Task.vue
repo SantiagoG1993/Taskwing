@@ -1,7 +1,6 @@
 <template>
 <div class="main_component_task" >
     <div class="task_container"  @click="openTaskInfo">
-<!--         <i class="fa-solid fa-pencil"></i> -->
         <h3 id="title">Estudiar por media hora</h3>
         <section class="data_c">
                 <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
@@ -92,8 +91,20 @@ const openTaskInfo = ()=>{
     bottom: 0;
     z-index: 5;
 }
-
-/* info modal */
+@media (min-width:1000px){
+    .task_container{
+        width: 95%;
+        height: 114px;
+        margin: 0px!important;
+        }
+        .main_component_task{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    }
+}
 
 
 </style>

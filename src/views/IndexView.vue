@@ -1,7 +1,7 @@
 <template>
     <div class="index_c">
         <section class="next_task_c">
-            <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-bars" @click="navBarIsOpen = !navBarIsOpen"></i>
             <NextTaskComponent />
         </section>
         <TaskSection />
@@ -12,8 +12,10 @@
             </div>
         </section>
         <div v-if="addtaskIsOpen == true">
-
-    <AddTaskForm @close-add-task = 'addtaskIsOpen = false' />
+            <AddTaskForm @close-add-task = 'addtaskIsOpen = false' />
+        </div>
+        <div v-if="navBarIsOpen == true">
+            <NavBarComponent  @close-navbar="navBarIsOpen = false"/>  
         </div>
     </div>
 </template>
@@ -23,8 +25,11 @@ import {ref} from 'vue';
 import NextTaskComponent from '../components/NextTaskComponent.vue'
 import TaskSection from '../components/TaskSection.vue'
 import AddTaskForm from '../components/AddTaskForm.vue'
+import NavBarComponent from '../components/NavBarComponent.vue'
 
 const addtaskIsOpen = ref(false);
+const navBarIsOpen = ref(true);
+
 </script>
 
 <style scoped>
@@ -86,6 +91,11 @@ const addtaskIsOpen = ref(false);
 }
 .fa-trash-can:active{
     color: #F3BC47;  
+}
+@media (min-width:1000px){
+    .fa-bars{
+        display: none;
+    }
 }
 
 </style>
