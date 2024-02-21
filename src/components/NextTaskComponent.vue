@@ -1,7 +1,7 @@
 <template>
-    <div  class="main_container_next_task">
+    <div  class="main_container_next_task ">
         <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">12:50h</span></h3>
-        <div class="nextTask_c">
+        <div class="nextTask_c" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
             <h2 id="taskName">Pasear al perro</h2>
             <section class="data_c">
                 <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
@@ -9,12 +9,19 @@
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
             </section>
         </div>
-            <hr>
+        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
+            <i class="fa-solid fa-pencil"></i>
+            <i class="fa-solid fa-flag-checkered"></i>
+            <i class="fa-solid fa-trash"></i>
+        </div>
     
     </div>
 </template>
 
 <script setup>
+import {ref} from 'vue';
+
+const subPanelIsOpen = ref(false)
 
 </script>
 
@@ -24,7 +31,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 2px;
 }
 .nextTask_c{
     user-select: none;
@@ -79,16 +86,37 @@
 }
 @media (min-width:1000px){
     .main_container_next_task{
+        margin-top: 30px!important;
+        margin-right: 100px!important;
         width: 72%;
-        align-self: center;
+        height: 300px;
+        align-self: end;
+
     }
     .nextTask_c{
         height: 50px;
+        cursor: pointer;
     }
     hr{
         width: 100%;
         color: rgb(255, 255, 255);
         margin-top: 20px!important;
     }
+    .subpanel{
+    width: 300px;
+    height: 40px;
+    border-radius: 3px;
+    background-color: #4EAC94;
+    display: flex;
+    align-self: flex-end;
+    margin-right: 30px!important;
+    align-items: center;
+    
+    justify-content: space-around;
+}
+.subpanel i{
+    color: white;
+    font-size: 22px;
+}
 }
 </style>

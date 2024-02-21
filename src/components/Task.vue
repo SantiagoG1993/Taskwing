@@ -1,6 +1,6 @@
 <template>
 <div class="main_component_task" >
-    <div class="task_container"  @click="openTaskInfo">
+    <div class="task_container"  @click="openTaskInfo" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false" >
         <h3 id="title">Estudiar por media hora</h3>
         <section class="data_c">
                 <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
@@ -8,6 +8,11 @@
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
         </section>
     </div>
+        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
+            <i class="fa-solid fa-pencil"></i>
+            <i class="fa-solid fa-flag-checkered"></i>
+            <i class="fa-solid fa-trash"></i>
+        </div>
 <div v-if="taskInfoIsOpen == true" class="taskInfo_c" >
     <TaskInfo @close-info="taskInfoIsOpen = false" />
 </div>
@@ -19,6 +24,7 @@
 import {ref} from 'vue'
 import TaskInfo from '../components/TaskInfo.vue'
 
+const subPanelIsOpen = ref(false)
 const taskInfoIsOpen = ref(false)
 
 const openTaskInfo = ()=>{
@@ -72,17 +78,6 @@ const openTaskInfo = ()=>{
     display: flex;
     gap: 10px;
 }
-.fa-pencil{
-    color: white;
-    position: absolute;
-    right: 14px;
-    top: 16px;
-    cursor: pointer;
-    font-size: 18px;
-}
-.fa-pencil:active{
-    color: #474747;
-}
 .taskInfo_c{
     position: fixed;
     top: 0;
@@ -91,19 +86,39 @@ const openTaskInfo = ()=>{
     bottom: 0;
     z-index: 5;
 }
+.subpanel{
+display: none;
+}
+
 @media (min-width:1000px){
     .task_container{
-        width: 95%;
+        width: 300px;
         height: 114px;
         margin: 0px!important;
         }
-        .main_component_task{
+    .main_component_task{
     position: relative;
-    width: 100%;
+    width: 300px;
+    height: 160px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1px;
     align-content: center;
     }
+    .subpanel{
+    width: 100%;
+    height: 40px;
+    border-radius: 3px;
+    background-color: var(--color1);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.subpanel i{
+    color: #474747;
+    font-size: 22px;
+}
 }
 
 

@@ -78,7 +78,7 @@ h2{
     color: #646464;
 }
 h4{
-    font-family: "Just Me Again Down Here", cursive;
+    font-family: var(--font3);
     font-weight: 200;
     font-size: 22px;
     color: #717171;

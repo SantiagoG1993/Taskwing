@@ -1,28 +1,32 @@
 <template>
     <div class="main_component"> 
+            <hr>
         <div class="filters_c">
             <h3 id="category_selected">All <i class="fa-solid fa-angle-down"></i></h3>
             <h3 id="category_selected">Today <i class="fa-solid fa-angle-down"></i></h3>
         </div>
+        <h2 class="today">Today</h2>
         <div class="today_c">
-            <h2 class="today">Today</h2>
+            <Task />
+            <Task />
+            <Task />
+            <Task />
+            
+        </div>
+        <hr>
+        <h2 class="today">Tomorrow</h2>
+        <div class="today_c">
+            <Task />
+            <Task />
             <Task />
             <Task />
             <Task />
         </div>
         <hr>
+        <h2 class="today">Other</h2>
         <div class="today_c">
-            <h2 class="today">Tomorrow</h2>
             <Task />
-            <Task />
-            <Task />
-        </div>
-        <hr>
-        <div class="today_c">
-            <h2 class="today">Other</h2>
-            <Task />
-            <Task />
-            <Task />
+            
         </div>
         
     </div>
@@ -43,23 +47,16 @@ import Task from '../components/Task.vue'
 }
 .today_c{
     width: 100%;
-    min-height: 200px!important;
+    min-height: 150px!important;
     margin-bottom: 10px!important;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-/*     position: relative; */
-/*     border: 1px solid red;
- */}
+    align-items: center;}
 .today{
     font-family: var(--font2);
     font-weight: 200;
     font-size: 16px;
-    align-self: flex-start;
-    margin-left: 20px!important;
-    margin-bottom: 10px!important;
-    margin-top: 5px!important;
 }
 hr{
     display: none;
@@ -90,28 +87,35 @@ hr{
 @media (min-width: 1000px){
 
 .main_component{
-    margin-top: 70px!important;
+    width: 65%;
+    align-self: flex-end;
+    margin-right: 100px!important;
+}
+.today{
+    align-self: flex-start;
+    font-weight: 400;
+    margin-top: 20px!important;
+    font-size: 18px;
 }
     .today_c{
     flex-direction: row;
-    width: 70%;
-    height: 200px;
+    width: 100%;
+/*     border: 1px solid red; */
+    min-height: 200px;
     align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: start;
     }
-}
-hr{
-    width: 80%;
+
+    hr{
+        display: unset;
+    width: 100%;
     color: rgb(255, 255, 255);
 }
-/* .today{
-    font-family: var(--font2);
-    font-weight: 300;
-    font-size: 16px;
-    position: absolute;
-    left: -30px;
-} */
 #category_selected{
-    display: none;
+    display: unset;
 }
+}
+
 </style>

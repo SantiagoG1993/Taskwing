@@ -12,7 +12,7 @@
             <label for="title">Time</label>
                 <input type="time" placeholder="Enter time here" class="input_text">
                 <input type="text" placeholder="Description" id="input_description">
-                <label for="category">Category</label>
+                <label for="category" id="category">Category</label>
                 <select name="category" id="select_category">
                     <option value="">Default</option>
                     <option value="">Call</option>
@@ -57,7 +57,6 @@ const handleClick  = ()=>{
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 .upper_menu{
     height: 60px;
@@ -186,5 +185,52 @@ label{
 }
 .ok_btn i {
     font-size: 30px;
+}
+@media (min-width:1000px){
+    .addTask_main_container{
+    width: 70%;
+    border: 2px solid #F3BC47;
+    background-color: #ffffff;
+    height: 300px;
+    align-items: start;
+    position: fixed;
+    top: 5%;
+    left: 20%;
+    box-shadow: var(--boxshadow);
+}
+.upper_menu{
+    display: none;
+}
+.addtask_form{
+    width: 50%;
+}
+form{
+    position: relative;
+}
+#category{
+position: absolute;
+top: 20%;
+left: 90%;
+}
+#select_category{
+position: absolute;
+top: 28%;
+left: 88%;
+}
+#input_description{
+    position: absolute;
+    background-color: #ededed;
+    top: 60%;
+    left: 90%;
+}
+.color_select_c{
+    position: absolute;
+    top: 45%;
+    right: 7%;
+}
+.ok_btn:hover{
+    background-color: #9f5050;
+    cursor: pointer;
+}
 }
 </style>
