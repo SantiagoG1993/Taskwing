@@ -1,5 +1,5 @@
 <template>
-    <div class="index_c">
+    <div class="index_c" v-if="isVisible == true"> 
         <section class="next_task_c">
             <i class="fa-solid fa-bars" @click="toggleNavBar"></i>
             <NextTaskComponent />
@@ -35,12 +35,18 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {ref,defineProps} from 'vue';
 import {onClickOutside} from '@vueuse/core'
 import NextTaskComponent from '../components/NextTaskComponent.vue'
 import TaskSection from '../components/TaskSection.vue'
 import AddTaskForm from '../components/AddTaskForm.vue'
 import NavBarComponent from '../components/NavBarComponent.vue'
+
+const props = defineProps(
+    {
+     isVisible:Boolean   
+    }
+)
 
 const addtaskIsOpen = ref(false);
 const navBarIsOpen = ref(true);

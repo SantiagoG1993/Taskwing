@@ -8,28 +8,40 @@
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
         </section>
     </div>
-        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
-            <i class="fa-solid fa-pencil"></i>
+        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse (true)"  >
+            <i class="fa-solid fa-pencil" @click="editTaskIsOpen = true"></i>
             <i class="fa-solid fa-flag-checkered"></i>
             <i class="fa-solid fa-trash"></i>
         </div>
 <div v-if="taskInfoIsOpen == true" class="taskInfo_c" >
     <TaskInfo @close-info="taskInfoIsOpen = false" />
 </div>
-
+<div v-if="editTaskIsOpen == true">
+    <EditTask @close-edit-task="editTaskIsOpen = false" />
+    </div>
 </div>
 </template>
 
 <script setup>
 import {ref} from 'vue'
 import TaskInfo from '../components/TaskInfo.vue'
+import EditTask from '../components/EditTask.vue'
 
+const editTaskIsOpen = ref(false)
 const subPanelIsOpen = ref(false)
 const taskInfoIsOpen = ref(false)
 
 const openTaskInfo = ()=>{
     taskInfoIsOpen.value = !taskInfoIsOpen.value
     console.log(taskInfoIsOpen.value)
+}
+const handleMouse = (boolean) => {
+    subPanelIsOpen.value = boolean;
+    if (boolean) {
+        setTimeout(() => {
+            subPanelIsOpen.value = false;
+        }, 3000);
+    }
 }
 
 </script>
@@ -118,6 +130,11 @@ display: none;
 .subpanel i{
     color: #474747;
     font-size: 22px;
+
+}
+.subpanel i:hover{
+    color: white;
+    cursor: pointer;
 }
 }
 

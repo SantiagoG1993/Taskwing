@@ -1,16 +1,31 @@
 <template>
-  <div>
-    <!-- <LoadingView /> -->
-    <!-- <LoginView /> -->
-    <IndexView />
+  <div>   
+<!--         <LoadingView :isVisible = showLoader />
+        <LoginView :isVisible = showLogin /> -->
+        <IndexView :isVisible = showIndex />
   </div>
 </template>
 
 <script setup>
-/* import LoadingView from './views/LoadingView.vue' */
+import {ref,onMounted} from 'vue';
+import LoadingView from './views/LoadingView.vue'
 import LoginView from '../src/views/LoginView.vue'
 import IndexView from  '../src/views/IndexView.vue'
 
+const showLoader = ref(false)
+const showIndex = ref(false)
+const showLogin = ref(false)
+
+
+onMounted(()=>{
+          showIndex.value = true
+/*     document.documentElement.style.overflow='hidden'
+ */    setTimeout(() => {
+        showLoader.value = false
+        showLogin.value = true
+        document.documentElement.style.overflow=''
+    }, 2500);
+})
 </script>
 
 <style>

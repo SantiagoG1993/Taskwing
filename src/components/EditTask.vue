@@ -59,6 +59,7 @@ const handleClick = ()=>{
     align-items: center;
 }
 .upper_menu{
+    user-select: none;
     height: 60px;
     width: 100%;
 background-color: #E78231;
@@ -183,5 +184,19 @@ label{
 }
 .ok_btn i {
     font-size: 30px;
+}
+@media (min-width:1000px){
+    .edit_task_main_container{
+        width:81%;
+        margin-left: 19%!important;
+        background-color: white;
+    }
+    .fa-arrow-left:hover{
+        color: white;
+        cursor: pointer;
+    }
+    #input_description{
+        background-color: #ebebeb;
+    }
 }
 </style>

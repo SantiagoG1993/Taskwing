@@ -6,14 +6,14 @@
         <div class="filter_container">
             <h3>Filter by date</h3>
             <hr>
-            <h4 class="from_to">From <i class="fa-solid fa-calendar"></i> 19/08</h4>
-            <h4 class="from_to">To <i class="fa-solid fa-calendar"></i>19/08</h4>
+            <h4 class="from_to">From: <input type="date" class="date"></h4>
+            <h4 class="from_to">To:<input type="date" class="date"></h4>
         </div>
         <div class="filter_container">
             <h3>Filter by time</h3>
             <hr>
-            <h4 class="from_to">From <i class="fa-solid fa-clock"></i>09:30</h4>
-            <h4 class="from_to">To<i class="fa-solid fa-clock"></i>09:30</h4>
+            <h4 class="from_to">From: <input type="time" class="time"></h4>
+            <h4 class="from_to">To:<input type="time" class="time"></h4>
         </div>
         <div class="filter_container">
             <h3>Filter by category</h3>
@@ -74,9 +74,8 @@ console.log('click afuera')
     user-select: none;
     position: fixed;
     top: 0px;
-    width: 190px;
+    width: 235px;
     height: 90vh;
-    border-radius: 0px 10px 10px 0px ;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -111,12 +110,18 @@ console.log('click afuera')
 }
 .from_to{
 /*     border: 1px solid black; */
-    width: 130px;
+    width: 80%;
     display: flex;
     justify-content: space-between;
     margin-top: 10px!important;
     margin-left: 20px!important;
 }
+.date, .time{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 form{
     margin-top: 10px!important;
 
@@ -132,6 +137,7 @@ label{
 input{
     margin-right: 8px!important;
 }
+
 @media (min-width:1000px){
     .nav_main_container{
     position: absolute;
@@ -178,6 +184,12 @@ input{
     font-size: 26px;
     color: #474747;
 }
+#logo:hover{
+    filter: grayscale(50%);
+    cursor: pointer;
+    transition: .5s all ease-in-out;
+}
+
 }
 
 </style>

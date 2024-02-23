@@ -1,5 +1,5 @@
 <template>
-    <div class="login_c">
+    <div class="login_c" v-if="isVisible == true">
         <section class="logo_c">
             <img src="../assets/logo.png" alt="" id="logo">  
             <h2>TASKWING</h2>
@@ -21,22 +21,22 @@
                 <img src="../assets/user.png" alt="" id="user_img">
                 <h1 id="user_title">User login</h1>
             </div>
-             <div class="input_main_c">
+            <div class="input_main_c">
                 <div class="input_c">
-                <i class="fa-solid fa-envelope"></i>
-                <input type="email" name="" id="" placeholder="Email"  class="input" >
-            </div>
-            <div class="input_c">
-                <i class="fa-solid fa-key"></i>
-                <input type="password" name="" id="" placeholder="Password" class="input">
-            </div>
-        <div class="forgotp_remember_c">
-            <div id="remember_c">
-                <input type="checkbox">
-                <p id="remember">Remeber me</p>
-            </div>
-            <p id="forgot">Forgot password?</p>
-        </div>
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="" id="" placeholder="Email"  class="input" >
+                </div>
+                <div class="input_c">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="password" name="" id="" placeholder="Password" class="input">
+                </div>
+                <div class="forgotp_remember_c">
+                    <div id="remember_c">
+                        <input type="checkbox">
+                        <p id="remember">Remeber me</p>
+                    </div>
+                    <p id="forgot">Forgot password?</p>
+                </div>
             </div>
             
         <div class="btn_c">
@@ -50,6 +50,13 @@
 </template>
 
 <script setup>
+import {defineProps} from 'vue'
+
+const props = defineProps(
+    {
+        isVisible:Boolean
+    }
+)
 
 </script>
 ``
@@ -59,7 +66,6 @@
     user-select: none;
     display: flex;
     flex-direction: column;
-/*     border: 1px solid green; */
     height: 100vh;
     justify-content: space-around;
 }
@@ -85,7 +91,7 @@ h4{
     letter-spacing: 3px;
 }
 #logo{
-    width: 131px;
+    width: 100px;
     transform: rotate(10deg);
 }
 .social_login_c{
@@ -135,13 +141,14 @@ i{
     font-size: 16px;
     font-weight: 200;
 }
-.right_c{
+/* .right_c{
         display: none;
-    }
+    } */
 /* CONTENEDOR DERECHO LOGIN */
 .input_c{
     width: 80%;
-    height: 65px;
+    height: 45px;
+    border: 1px solid #E1E1E1;
     background-color: white;
     border-radius: 4px;
     display: flex;
@@ -150,29 +157,29 @@ i{
     margin-top: 30px!important;
 }
 .input_c i {
-    font-size: 25px;
+    font-size: 18px;
     color: #454545;
 }
 .input{
     width: 80%;
     height: 50%;
-    font-size: 20px;
+    font-size: 14px;
     border: none;
-        font-family: var(--font1);
-        font-weight: 200;
-        cursor: pointer;
-        user-select: none;
+    font-family: var(--font1);
+    font-weight: 200;
+    cursor: pointer;
+    user-select: none;
 }
 .input:focus{
     outline: none;
 }
 .user_title_c{
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
     align-items: center;
+    display: none;
 }
 #user_title{
     font-family: var(--font1);
@@ -199,29 +206,34 @@ i{
     display: flex;
     gap: 5px;
     font-family: var(--font1);
+    align-items: center;
     font-weight: 300;
-
+    font-size: 12px;
 }
 #forgot{
     font-family: var(--font1);
     font-style: italic;
     font-weight: 200;
+    font-size: 12px;
 }
 #forgot:hover{
     color: #3f3e3e;
     cursor: pointer;
 }
 #login_btn{
-    width: 60%;
-    height: 60px;
+    width: 30%;
+    height: 42px;
     background-color: #C32E3B;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 20px;
+    border-radius: 4px;
+    font-size: 16px;
     font-family: var(--font1);
-    font-weight: 200;
-    
+    font-weight: 300;
+    margin-top: 20px!important;   
+}
+#login_btn:active{
+   background-color: #c85660; 
 }
 #login_btn:hover{
  background-color: #c2404b;   
@@ -263,5 +275,36 @@ i{
         height: 100vh;
         width: 600px;
     }
+    .user_title_c{
+    display: flex;
+}
+.input_c{
+    height: 65px;
+    border: none;
+}
+.input{
+    font-size: 20px;
+}
+.input_c i {
+    font-size: 25px;
+}
+#login_btn{
+    width: 60%;
+    height: 60px;
+    background-color: #C32E3B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    font-family: var(--font1);
+    font-weight: 200;
+}
+#remember_c{
+    font-size: 14px;
+}
+#forgot{
+
+    font-size: 14px;
+}
 }
 </style>

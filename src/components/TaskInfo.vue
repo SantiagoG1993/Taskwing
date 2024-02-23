@@ -130,5 +130,25 @@ background-color: #E78231;
     {
     color: white;
     font-size: 25px;
+    }   
+    @media (min-width:1000px){
+        .task_info_c{
+            width: 81%;
+            margin-left: 19%!important;
+            background-color: white;
+        }
+        .info_data_c{
+            flex-direction: row;
+        }
+        .info_data_c h3{
+            color: black;
+        }
+        .fa-arrow-left:hover{
+            cursor: pointer;
+            color: white;
+        }
+        .edit_task_btn{
+            display: none;
+        }
     }
 </style>
