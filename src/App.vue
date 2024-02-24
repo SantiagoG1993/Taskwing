@@ -15,9 +15,20 @@ import IndexView from  '../src/views/IndexView.vue'
 const showLoader = ref(false)
 const showIndex = ref(false)
 const showLogin = ref(false)
+const clientData = ref(null)
 
 
 onMounted(()=>{
+/* const url = 'http://localhost:8080/api/clients'
+fetch(url)
+.then(res=>res.json())
+.then(data=> {
+  clientData.value=data;
+  console.log(data.map(client => client.taskList))
+}
+)
+.catch(err=>console.log(err)) */
+
           showIndex.value = true
 /*     document.documentElement.style.overflow='hidden'
  */    setTimeout(() => {

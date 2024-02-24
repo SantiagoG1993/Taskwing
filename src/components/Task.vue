@@ -1,14 +1,14 @@
 <template>
 <div class="main_component_task" >
-    <div class="task_container"  @click="openTaskInfo" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false" >
-        <h3 id="title">Estudiar por media hora</h3>
+    <div class="task_container" :style="{ backgroundColor: getColor(props.color) }"  @click="openTaskInfo" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false" >
+        <h3 id="title">{{props.taskName}}</h3>
         <section class="data_c">
-                <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
-                <h3 id="date"><i class="fa-solid fa-calendar"></i>19/08</h3>
+                <h3 id="time"><i class="fa-solid fa-clock clock2"></i>{{props.time.slice(0,-7)}}</h3>
+                <h3 id="date"><i class="fa-solid fa-calendar"></i>{{props.date.slice(5)}}</h3>
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
         </section>
     </div>
-        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse (true)"  >
+        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse (true)" :style="{ backgroundColor: getColor(props.color) }"  >
             <i class="fa-solid fa-pencil" @click="editTaskIsOpen = true"></i>
             <i class="fa-solid fa-flag-checkered"></i>
             <i class="fa-solid fa-trash"></i>
@@ -23,9 +23,43 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref,defineProps} from 'vue'
 import TaskInfo from '../components/TaskInfo.vue'
 import EditTask from '../components/EditTask.vue'
+
+
+const color ={
+    RED:'#C32E3B',
+    ORANGE:'#E78231',
+    GREEN:'#4EAC94',
+    YELLOW:'#F3BC47',
+    GREY:'#514D4D'
+}
+
+const getColor = (colorValue) => {
+  switch (colorValue) {
+    case 'RED':
+      return color.RED;
+    case 'ORANGE':
+      return color.ORANGE;
+    case 'GREEN':
+      return color.GREEN;
+    case 'YELLOW':
+      return color.YELLOW;
+    case 'GREY':
+      return color.GREY;
+    default:
+      return color.GREY; // Color por defecto en caso de que el valor no coincida con ninguno de los enumerados
+  }
+}
+const props = defineProps(
+    {
+        taskName:String,
+        time:String,
+        date:String,
+        color:String
+    }
+)
 
 const editTaskIsOpen = ref(false)
 const subPanelIsOpen = ref(false)
@@ -76,6 +110,7 @@ const handleMouse = (boolean) => {
     font-family: var(--font1);
     font-weight: 500;
     font-size: 15px;
+    color: white;
 }
 .data_c{
     display: flex;

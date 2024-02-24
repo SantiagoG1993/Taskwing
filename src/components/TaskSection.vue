@@ -4,41 +4,79 @@
         <div class="filters_c">
             <h3 id="category_selected"> Category <i class="fa-solid fa-angle-down"></i></h3>
         </div>
-        <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == false" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == true" class="fa-solid fa-plus plus_minus_i"></i></h2>
+        <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="todayIsOpen == true">
-            <Task />
-            <Task />
-            <Task />
-            <Task />
+            <Task v-for="task in tasksFromToday" 
+            :key="task.id" 
+            :taskName="task.taskName" 
+            :time="task.time" 
+            :date="task.date" 
+            :color="task.color"
+            />
             
         </div>
         <hr>
-        <h2 @click="handleTomorrow" class="today">Tomorrow <i v-if="tomorrowIsOpen == false" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="tomorrowIsOpen == true" class="fa-solid fa-plus plus_minus_i"></i></h2>
+        <h2 @click="handleTomorrow" class="today">Tomorrow <i v-if="tomorrowIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="tomorrowIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="tomorrowIsOpen == true">
-            <Task />
-            <Task />
-            <Task />
-            <Task />
-            <Task />
+            <Task v-for="task in tasksFromTomorrow" 
+            :key="task.id" 
+            :taskName="task.taskName" 
+            :time="task.time" 
+            :date="task.date" 
+            :color="task.color"
+            />
         </div>
         <hr>
-        <h2  @click="handleOther" class="today">Other <i v-if="otherIsOpen == false" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="otherIsOpen == true" class="fa-solid fa-plus plus_minus_i"></i></h2>
+        <h2  @click="handleOther" class="today">Other <i v-if="otherIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="otherIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="otherIsOpen == true">
-            <Task />
-            
+            <Task v-for="task in otherTasks" 
+            :key="task.id" 
+            :taskName="task.taskName" 
+            :time="task.time" 
+            :date="task.date" 
+            :color="task.color"
+            />           
         </div>
         
     </div>
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 import Task from '../components/Task.vue'
 
 const todayIsOpen = ref(true)
 const tomorrowIsOpen = ref(true)
 const otherIsOpen = ref(true)
+const clientData = ref(null)
 
+const tasksFromToday = ref (null)
+const tasksFromTomorrow = ref(null)
+const otherTasks = ref(null)
+
+onMounted(()=>{
+const url = 'http://localhost:8080/api/clients'
+fetch(url)
+.then(res=>res.json())
+.then(data=> {
+    clientData.value=data[0].taskList;
+
+    const date = new Date()
+    const dateToday = date.toISOString().split('T')[0];
+
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, '0'); // Sumamos 1 al mes y aseguramos que tenga 2 dígitos
+const day = String(date.getDate() + 1).padStart(2, '0'); 
+
+    const dateTomorrow = `${year}-${month}-${day}`
+    console.log(dateTomorrow)
+    tasksFromToday.value=data[0].taskList.filter(t=>t.date == dateToday)
+    tasksFromTomorrow.value=data[0].taskList.filter(t=>t.date == dateTomorrow)
+    otherTasks.value = data[0].taskList.filter(t=>t.date != dateTomorrow && t.date != dateToday)
+}
+)
+.catch(err=>console.log(err))
+})
 
 const handleToday = ()=>{
     todayIsOpen.value = !todayIsOpen.value
