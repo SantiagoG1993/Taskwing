@@ -7,11 +7,13 @@
         <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="todayIsOpen == true">
             <Task v-for="task in tasksFromToday" 
-            :key="task.id" 
+            :key="task.id"
+            :id="task.id" 
             :taskName="task.taskName" 
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
+            @delete-task="actualizarTaskList"
             />
             
         </div>
@@ -20,10 +22,13 @@
         <div class="today_c" v-if="tomorrowIsOpen == true">
             <Task v-for="task in tasksFromTomorrow" 
             :key="task.id" 
+            :id="task.id" 
             :taskName="task.taskName" 
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
+            @delete-task="actualizarTaskList"
+            
             />
         </div>
         <hr>
@@ -31,10 +36,12 @@
         <div class="today_c" v-if="otherIsOpen == true">
             <Task v-for="task in otherTasks" 
             :key="task.id" 
+            :id="task.id" 
             :taskName="task.taskName" 
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
+            @delete-task="actualizarTaskList(task.id)"
             />           
         </div>
         
@@ -42,7 +49,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue'
+import {ref, onMounted,computed} from 'vue'
 import Task from '../components/Task.vue'
 
 const todayIsOpen = ref(true)
@@ -50,9 +57,35 @@ const tomorrowIsOpen = ref(true)
 const otherIsOpen = ref(true)
 const clientData = ref(null)
 
-const tasksFromToday = ref (null)
-const tasksFromTomorrow = ref(null)
-const otherTasks = ref(null)
+
+const actualizarTaskList = (id)=>{
+    clientTaskList.value = clientTaskList.value.filter(task => task.id !== id && !task.deleted);
+}
+
+const clientTaskList = ref(null)
+
+const tasksFromToday = computed(() => {
+    if (!clientTaskList.value) return null;
+    const dateToday = new Date().toISOString().split('T')[0];
+    return clientTaskList.value.filter(task => task.date === dateToday && !task.deleted);
+});
+
+const tasksFromTomorrow = computed(() => {
+    if (!clientTaskList.value) return null;
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
+    return clientTaskList.value.filter(task => task.date === dateTomorrow && !task.deleted);
+});
+
+const otherTasks = computed(() => {
+    if (!clientTaskList.value) return null;
+    const dateToday = new Date().toISOString().split('T')[0];
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
+    return clientTaskList.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted);
+});
 
 onMounted(()=>{
 const url = 'http://localhost:8080/api/clients'
@@ -60,7 +93,9 @@ fetch(url)
 .then(res=>res.json())
 .then(data=> {
     clientData.value=data[0].taskList;
+    clientTaskList.value = data[0].taskList
 
+/* 
     const date = new Date()
     const dateToday = date.toISOString().split('T')[0];
 
@@ -69,10 +104,10 @@ const month = String(date.getMonth() + 1).padStart(2, '0'); // Sumamos 1 al mes 
 const day = String(date.getDate() + 1).padStart(2, '0'); 
 
     const dateTomorrow = `${year}-${month}-${day}`
-    console.log(dateTomorrow)
-    tasksFromToday.value=data[0].taskList.filter(t=>t.date == dateToday)
-    tasksFromTomorrow.value=data[0].taskList.filter(t=>t.date == dateTomorrow)
-    otherTasks.value = data[0].taskList.filter(t=>t.date != dateTomorrow && t.date != dateToday)
+    console.log(data)
+    tasksFromToday.value=data[0].taskList.filter(t=>t.date == dateToday && t.deleted == false)
+    tasksFromTomorrow.value=data[0].taskList.filter(t=>t.date == dateTomorrow && t.deleted == false )
+    otherTasks.value = data[0].taskList.filter(t=>t.date != dateTomorrow && t.date != dateToday && t.deleted == false ) */
 }
 )
 .catch(err=>console.log(err))

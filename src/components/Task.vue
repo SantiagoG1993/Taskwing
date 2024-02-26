@@ -11,7 +11,7 @@
         <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse (true)" :style="{ backgroundColor: getColor(props.color) }"  >
             <i class="fa-solid fa-pencil" @click="editTaskIsOpen = true"></i>
             <i class="fa-solid fa-flag-checkered"></i>
-            <i class="fa-solid fa-trash"></i>
+            <i class="fa-solid fa-trash" @click="deleteTask(props.id)"></i>
         </div>
 <div v-if="taskInfoIsOpen == true" class="taskInfo_c" >
     <TaskInfo @close-info="taskInfoIsOpen = false" />
@@ -23,9 +23,43 @@
 </template>
 
 <script setup>
-import {ref,defineProps} from 'vue'
+import {ref,defineProps,defineEmits} from 'vue'
 import TaskInfo from '../components/TaskInfo.vue'
 import EditTask from '../components/EditTask.vue'
+
+const emit = defineEmits(['delete-task'])
+
+const deleteTask = (id) => {
+    alertify.confirm(
+        "Eliminar tarea",
+        "¿Estás seguro de que quieres eliminar esta tarea?",
+        () => { 
+            const url = `http://localhost:8080/api/task/delete?id=${id}`;
+            const options = {
+                method: 'PUT',
+            };
+            fetch(url, options)
+                .then(res => {
+                    console.log(res);
+                    emit('delete-task',props.id)
+                    console.log('prueba')
+                })
+                .catch(err => console.log(err));
+        },
+        () => { 
+        }
+    )
+    .set('labels', {ok:'Eliminar', cancel:'Cancelar'})
+    .set('transition', 'fade')
+    .set('modal', true)
+    .set('closable', true)
+    .set('movable', false)
+    .set('onshow', function() {
+        this.elements.dialog.style.top = '50%';
+        this.elements.dialog.style.left = '50%';
+        this.elements.dialog.style.transform = 'translate(-50%, -50%)';
+    });
+};
 
 
 const color ={
@@ -57,7 +91,8 @@ const props = defineProps(
         taskName:String,
         time:String,
         date:String,
-        color:String
+        color:String,
+        id:Number
     }
 )
 

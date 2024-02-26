@@ -1,7 +1,7 @@
 <template>
   <div>   
-<!--         <LoadingView :isVisible = showLoader />
-        <LoginView :isVisible = showLogin /> -->
+        <LoadingView :isVisible = showLoader />
+  <!--       <LoginView :isVisible = showLogin /> -->
         <IndexView :isVisible = showIndex />
   </div>
 </template>
@@ -12,7 +12,7 @@ import LoadingView from './views/LoadingView.vue'
 import LoginView from '../src/views/LoginView.vue'
 import IndexView from  '../src/views/IndexView.vue'
 
-const showLoader = ref(false)
+const showLoader = ref(true)
 const showIndex = ref(false)
 const showLogin = ref(false)
 const clientData = ref(null)
