@@ -2,17 +2,17 @@
     <div  class="main_container_next_task ">
         <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">12:50h</span></h3>
         <div class="nextTask_c" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
-            <h2 id="taskName">Pasear al perro</h2>
+            <h2 id="taskName">{{props.taskName}}</h2>
             <section class="data_c">
-                <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
-                <h3 id="date"><i class="fa-solid fa-calendar"></i>19/08</h3>
+                <h3 id="time"><i class="fa-solid fa-clock clock2"></i>{{props.time}}</h3>
+                <h3 id="date"><i class="fa-solid fa-calendar"></i>{{props.date}}</h3>
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
             </section>
         </div>
         <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse(true)">
             <i class="fa-solid fa-pencil" @click="editTaskIsOpen = true"></i>
-            <i class="fa-solid fa-flag-checkered"></i>
-            <i class="fa-solid fa-trash"></i>
+            <i class="fa-solid fa-flag-checkered" @click="finishTask(props.id)"></i>
+            <i class="fa-solid fa-trash" @click="deleteTask(props.id)"></i>
         </div>
         <div v-if="editTaskIsOpen == true">
             <EditTask @close-edit-task="editTaskIsOpen = false" />
@@ -21,13 +21,23 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {ref,defineEmits,defineProps} from 'vue';
 import EditTask from '../components/EditTask.vue'
 
 
-const editTaskIsOpen = ref(false)
+const emit = defineEmits(['delete-task','finish-task'])
 
+const props = defineProps({
+    id:Number,
+taskName:String,
+time:String,
+date:String,
+})
+
+const editTaskIsOpen = ref(false)
 const subPanelIsOpen = ref(false)
+
+
 const handleMouse = (boolean) => {
     subPanelIsOpen.value = boolean;
     if (boolean) {
@@ -36,6 +46,57 @@ const handleMouse = (boolean) => {
         }, 3000);
     }
     }
+
+
+
+const deleteTask = (id) => {
+    alertify.confirm(
+        "Eliminar tarea",
+        "¿Estás seguro de que quieres eliminar esta tarea?",
+        () => { 
+            const url = `http://localhost:8080/api/task/delete?id=${id}`;
+            const options = {
+                method: 'PUT',
+            };
+            fetch(url, options)
+                .then(res => {
+                    console.log(res);
+                    emit('delete-task',props.id)
+                    console.log('prueba')
+                })
+                .catch(err => console.log(err));
+        },
+        () => { 
+        }
+    )
+    .set('labels', {ok:'Eliminar', cancel:'Cancelar'})
+    .set('transition', 'fade')
+    .set('modal', true)
+    .set('closable', true)
+    .set('movable', false)
+    .set('onshow', function() {
+        this.elements.dialog.style.top = '50%';
+        this.elements.dialog.style.left = '50%';
+        this.elements.dialog.style.transform = 'translate(-50%, -50%)';
+    });
+};
+const finishTask = (id)=>{
+    alertify.confirm(
+        "Finalizar tarea?",
+        "Esta seguro que desa finalizar esta tarea?",
+        ()=>{
+    const url=`http://localhost:8080/api/task/finish?id=${id}`;
+    const options = {method:'PUT'}
+    fetch(url,options)
+    .then(res=>console.log(res))
+    .then(data=>emit('finish-task'))
+    .catch(err=>console.log(err))
+        },
+        ()=>{
+
+        })
+    
+}    
 
 </script>
 

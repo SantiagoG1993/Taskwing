@@ -1,17 +1,17 @@
 <template>
     <div class="addTask_main_container">
-         <section class="upper_menu">
+        <section class="upper_menu">
                 <i class="fa-solid fa-arrow-left" @click = 'handleClick' ></i>
                 <h2 id="info_title"> Add new task </h2>
         </section>  
         <form action="" class="addtask_form">
             <label for="title">What is to be done?</label>
-                <input type="text" placeholder="Enter task here" class="input_text">
+                <input type="text" placeholder="Enter task here" class="input_text" v-model="taskName">
             <label for="title">Due date</label>
-                <input type="date" placeholder="Enter date here" class="input_text">
+                <input type="date" placeholder="Enter date here" class="input_text" v-model="date" step="any">
             <label for="title">Time</label>
-                <input type="time" placeholder="Enter time here" class="input_text">
-                <input type="text" placeholder="Description" id="input_description">
+                <input type="time" placeholder="Enter time here" class="input_text" v-model="time">
+                <input type="text" placeholder="Description" id="input_description" v-model="description">
                 <label for="category" id="category">Category</label>
                 <select name="category" id="select_category">
                     <option value="">Default</option>
@@ -21,23 +21,53 @@
         </form>
         <section class="color_select_c">
             <h2 id="color_title">Color</h2>
-            <div class="color_option color1"></div>
-            <div class="color_option color2"></div>
-            <div class="color_option color3"></div>
-            <div class="color_option color4"></div>
-            <div class="color_option color5"></div>
+            <div class="color_option color1" @click="handleColor('RED','color1')"></div>
+            <div class="color_option color2" @click="handleColor('ORANGE','color2')"></div>
+            <div class="color_option color3" @click="handleColor('GREEN','color3')"></div>
+            <div class="color_option color4" @click="handleColor('YELLOW','color4')"></div>
+            <div class="color_option color5" @click="handleColor('GREY','color5')"></div>
         </section>
-        <div class="ok_btn">
+        <div class="ok_btn" @click="addTask">
             <i class="fa-solid fa-check"></i>
         </div>
     </div>
 </template>
 
 <script setup>
-import {defineEmits} from 'vue';
+import {ref,defineEmits} from 'vue';
+
+const taskName = ref("")
+const date = ref("")
+const time = ref("")
+const description = ref("")
+const color = ref("")
+
+
+
+const addTask = ()=>{
+    const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}`
+
+const options = {
+    method:'POST',
+}
+fetch(url, options)
+.then(res=>console.log(res))
+.then(data=>console.log(data))
+.catch(err=>console.log(err))
+}
 
 
 const emit = defineEmits(['close-add-task'])
+
+const handleColor = (colorName,c)=>{
+color.value = colorName
+
+const allColors =document.querySelectorAll('.color_option')
+allColors.forEach(c => c.classList.remove('selected-color'))
+
+const e = document.querySelector(`.${c}`)
+e.classList.add("selected-color")
+}
 
 const handleClick  = ()=>{
     emit('close-add-task')
@@ -78,6 +108,9 @@ background-color: #E78231;
     font-weight: 400;
     font-size: 18px;
     margin-left: 25px!important;
+}
+.selected-color{
+    border: 1px solid white;
 }
 /* Form */
 

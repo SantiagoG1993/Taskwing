@@ -2,7 +2,12 @@
     <div class="index_c" v-if="isVisible == true"> 
         <section class="next_task_c">
             <i class="fa-solid fa-bars" @click="toggleNavBar"></i>
-            <NextTaskComponent />
+            <NextTaskComponent
+            :taskName="nextTask.taskName ?? 'No task available'" 
+            :time="nextTask.time ?? 'No time available'"
+            :date="nextTask.date ?? 'No date available'"
+            :id="nextTask.id ?? 'No id available'"
+             />
         </section>
         <TaskSection />
         <section class="add_task_c">
@@ -35,23 +40,33 @@
 </template>
 
 <script setup>
-import {ref,defineProps} from 'vue';
+import {ref,defineProps,onMounted} from 'vue';
 import {onClickOutside} from '@vueuse/core'
 import NextTaskComponent from '../components/NextTaskComponent.vue'
 import TaskSection from '../components/TaskSection.vue'
 import AddTaskForm from '../components/AddTaskForm.vue'
 import NavBarComponent from '../components/NavBarComponent.vue'
 
+const addtaskIsOpen = ref(false);
+const navBarIsOpen = ref(true);
+const addTaskContainer = ref(null)
 const props = defineProps(
     {
      isVisible:Boolean   
     }
 )
+const nextTask = ref(null)
 
-const addtaskIsOpen = ref(false);
-const navBarIsOpen = ref(true);
-const addTaskContainer = ref(null)
-
+onMounted(()=>{
+    const url='http://localhost:8080/api/clients'
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>{
+        console.log(data[0].taskList[0].taskName);
+        nextTask.value=data[0].taskList[0]
+        })
+    .catch(err=>console.log(err))
+})
 
 const handleResize = () => {
     navBarIsOpen.value = window.innerWidth > 1000;
@@ -70,11 +85,12 @@ const toggleAddTask = ()=>{
 document.documentElement.style.overflow="hidden"   
 addtaskIsOpen.value = true
 }
-
 onClickOutside(addTaskContainer, ()=>{
 document.documentElement.style.overflow=""   
 addtaskIsOpen.value = false
 })
+
+
 </script>
 
 <style scoped>

@@ -8,13 +8,15 @@
         <div class="today_c" v-if="todayIsOpen == true">
             <Task v-for="task in tasksFromToday" 
             :key="task.id"
+            :state="task.state"
             :id="task.id" 
             :taskName="task.taskName" 
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
-            @delete-task="actualizarTaskList"
-            />
+            @delete-task="actualizarTaskList(task.id)"
+            @finish-task="actualizarTaskListFinished(task.id)"
+                        />
             
         </div>
         <hr>
@@ -22,26 +24,29 @@
         <div class="today_c" v-if="tomorrowIsOpen == true">
             <Task v-for="task in tasksFromTomorrow" 
             :key="task.id" 
-            :id="task.id" 
-            :taskName="task.taskName" 
-            :time="task.time" 
-            :date="task.date" 
-            :color="task.color"
-            @delete-task="actualizarTaskList"
-            
-            />
-        </div>
-        <hr>
-        <h2  @click="handleOther" class="today">Other <i v-if="otherIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="otherIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
-        <div class="today_c" v-if="otherIsOpen == true">
-            <Task v-for="task in otherTasks" 
-            :key="task.id" 
+            :state="task.state"
             :id="task.id" 
             :taskName="task.taskName" 
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
             @delete-task="actualizarTaskList(task.id)"
+            @finish-task="actualizarTaskListFinished(task.id)"            
+            />
+        </div>
+        <hr>
+        <h2  @click="handleOther" class="today">Other <i v-if="otherIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="otherIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
+        <div class="today_c" v-if="otherIsOpen == true">
+            <Task v-for="task in otherTasks" 
+            :key="task.id"
+            :state="task.state" 
+            :id="task.id" 
+            :taskName="task.taskName" 
+            :time="task.time" 
+            :date="task.date" 
+            :color="task.color"
+            @delete-task="actualizarTaskList(task.id)"
+            @finish-task="actualizarTaskListFinished(task.id)"
             />           
         </div>
         
@@ -58,16 +63,23 @@ const otherIsOpen = ref(true)
 const clientData = ref(null)
 
 
+const clientTaskList = ref(null)
+
 const actualizarTaskList = (id)=>{
     clientTaskList.value = clientTaskList.value.filter(task => task.id !== id && !task.deleted);
 }
+const actualizarTaskListFinished = (taskId) => {
 
-const clientTaskList = ref(null)
+    clientTaskList.value = clientTaskList.value.filter(task => task.id !== taskId);
+}
+
+
 
 const tasksFromToday = computed(() => {
     if (!clientTaskList.value) return null;
     const dateToday = new Date().toISOString().split('T')[0];
-    return clientTaskList.value.filter(task => task.date === dateToday && !task.deleted);
+
+    return clientTaskList.value.filter(task => task.date === dateToday && !task.delete && task.state == 'PENDING' );
 });
 
 const tasksFromTomorrow = computed(() => {
@@ -75,7 +87,8 @@ const tasksFromTomorrow = computed(() => {
     const tomorrowDate = new Date();
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
-    return clientTaskList.value.filter(task => task.date === dateTomorrow && !task.deleted);
+
+    return clientTaskList.value.filter(task => task.date === dateTomorrow && !task.deleted  && task.state == 'PENDING');
 });
 
 const otherTasks = computed(() => {
@@ -84,8 +97,12 @@ const otherTasks = computed(() => {
     const tomorrowDate = new Date();
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
-    return clientTaskList.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted);
+
+    return clientTaskList.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted && task.state == 'PENDING');
 });
+
+
+
 
 onMounted(()=>{
 const url = 'http://localhost:8080/api/clients'
