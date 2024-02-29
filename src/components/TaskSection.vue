@@ -2,10 +2,20 @@
     <div class="main_component"> 
             <hr>
         <div class="filters_c">
-            <h3 id="category_selected"> Category <i class="fa-solid fa-angle-down"></i></h3>
+            <label for="select_category" id_cat>Category</label>
+            <hr>
+    <select name="category" id="select_category" v-model="selectedCategory">
+        <option value="" disabled>Select category</option>
+        <option :value="'ALL'">All</option>
+        <option :value="'DEFAULT'">Default</option>
+        <option :value="'WORK'">Work</option>
+        <option :value="'URGENT'">Urgent</option>
+        <option :value="'PERSONAL'">Personal</option>
+        <option :value="'MEETING'">Meeting</option>
+    </select>
         </div>
         <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
-        <div class="today_c" v-if="todayIsOpen == true">
+        <div class="today_c" v-if="todayIsOpen == true && tasksFromToday.length >0 ">
             <Task v-for="task in tasksFromToday" 
             :key="task.id"
             :state="task.state"
@@ -21,7 +31,7 @@
         </div>
         <hr>
         <h2 @click="handleTomorrow" class="today">Tomorrow <i v-if="tomorrowIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="tomorrowIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
-        <div class="today_c" v-if="tomorrowIsOpen == true">
+        <div class="today_c" v-if="tomorrowIsOpen == true  && tasksFromTomorrow.length >0">
             <Task v-for="task in tasksFromTomorrow" 
             :key="task.id" 
             :state="task.state"
@@ -36,7 +46,7 @@
         </div>
         <hr>
         <h2  @click="handleOther" class="today">Other <i v-if="otherIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="otherIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
-        <div class="today_c" v-if="otherIsOpen == true">
+        <div class="today_c" v-if="otherIsOpen == true && otherTasks.length >0" > 
             <Task v-for="task in otherTasks" 
             :key="task.id"
             :state="task.state" 
@@ -61,7 +71,16 @@ const todayIsOpen = ref(true)
 const tomorrowIsOpen = ref(true)
 const otherIsOpen = ref(true)
 const clientData = ref(null)
-const clientTaskList = ref([])
+const selectedCategory = ref('ALL')
+const clientTaskList =ref([])
+const filteredTasks = computed(()=>{
+  if(selectedCategory.value == 'ALL'){
+    return clientTaskList.value
+  }else{
+    return clientTaskList.value.filter(t=>t.category == selectedCategory.value)
+  }
+})
+
 
 const actualizarTaskList = (id)=>{
     clientTaskList.value = clientTaskList.value.filter(task => task.id !== id && !task.deleted);
@@ -77,7 +96,7 @@ const tasksFromToday = computed(() => {
     if (!clientTaskList.value) return null;
     const dateToday = new Date().toISOString().split('T')[0];
 
-    return clientTaskList.value.filter(task => task.date === dateToday && !task.delete && task.state == 'PENDING' );
+    return filteredTasks.value.filter(task => task.date === dateToday && !task.delete && task.state == 'PENDING' );
 });
 
 const tasksFromTomorrow = computed(() => {
@@ -85,8 +104,7 @@ const tasksFromTomorrow = computed(() => {
     const tomorrowDate = new Date();
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
-
-    return clientTaskList.value.filter(task => task.date === dateTomorrow && !task.deleted  && task.state == 'PENDING');
+    return filteredTasks.value.filter(task => task.date === dateTomorrow && !task.deleted  && task.state == 'PENDING');
 });
 
 const otherTasks = computed(() => {
@@ -96,7 +114,7 @@ const otherTasks = computed(() => {
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
 
-    return clientTaskList.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted && task.state == 'PENDING');
+    return filteredTasks.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted && task.state == 'PENDING');
 });
 
 
@@ -110,20 +128,6 @@ fetch(url)
     const cData = data[0].taskList
     clientData.value=cData;
     clientTaskList.value = cData
-
-/* 
-    const date = new Date()
-    const dateToday = date.toISOString().split('T')[0];
-
-const year = date.getFullYear();
-const month = String(date.getMonth() + 1).padStart(2, '0'); // Sumamos 1 al mes y aseguramos que tenga 2 dígitos
-const day = String(date.getDate() + 1).padStart(2, '0'); 
-
-    const dateTomorrow = `${year}-${month}-${day}`
-    console.log(data)
-    tasksFromToday.value=data[0].taskList.filter(t=>t.date == dateToday && t.deleted == false)
-    tasksFromTomorrow.value=data[0].taskList.filter(t=>t.date == dateTomorrow && t.deleted == false )
-    otherTasks.value = data[0].taskList.filter(t=>t.date != dateTomorrow && t.date != dateToday && t.deleted == false ) */
 }
 )
 .catch(err=>console.log(err))
@@ -195,7 +199,22 @@ hr{
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center ;
+    font-family: var(--font1);
     padding: 20px 40px 0px 40px!important;
+}
+.filters_c hr{
+    width: 65%;
+    color: rgb(255, 255, 255);
+}
+#select_category{
+    border: none;
+    background-color: rgb(234, 234, 234);
+    width: 200px;
+    height: 40px;
+    font-family: var(--font1);
+    padding-left: 10px!important;
+    border-radius: 4px;
 }
 @media (min-width: 1000px){
 

@@ -53,7 +53,7 @@ const navBarIsOpen = ref(true);
 const addTaskContainer = ref(null)
 const props = defineProps(
     {
-     isVisible:Boolean   
+    isVisible:Boolean   
     }
 )
 const nextTask = ref(null)

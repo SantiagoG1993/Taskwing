@@ -57,6 +57,7 @@ const options = {
 fetch(url, options)
 .then(res=>console.log(res))
 .then(data=>{
+    window.location.reload()
     emit('close-add-task')
     emit('update-list')
 })

@@ -30,12 +30,12 @@ fetch(url)
 .catch(err=>console.log(err)) */
 
           showIndex.value = true
-     document.documentElement.style.overflow='hidden'
-     setTimeout(() => {
+      document.documentElement.style.overflow='hidden'
+      setTimeout(() => {
         showLoader.value = false
         showLogin.value = true
         document.documentElement.style.overflow=''
-    }, 2500);
+    }, 750);
 })
 </script>
 
