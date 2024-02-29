@@ -61,9 +61,7 @@ const todayIsOpen = ref(true)
 const tomorrowIsOpen = ref(true)
 const otherIsOpen = ref(true)
 const clientData = ref(null)
-
-
-const clientTaskList = ref(null)
+const clientTaskList = ref([])
 
 const actualizarTaskList = (id)=>{
     clientTaskList.value = clientTaskList.value.filter(task => task.id !== id && !task.deleted);
@@ -109,8 +107,9 @@ const url = 'http://localhost:8080/api/clients'
 fetch(url)
 .then(res=>res.json())
 .then(data=> {
-    clientData.value=data[0].taskList;
-    clientTaskList.value = data[0].taskList
+    const cData = data[0].taskList
+    clientData.value=cData;
+    clientTaskList.value = cData
 
 /* 
     const date = new Date()

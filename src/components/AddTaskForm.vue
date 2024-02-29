@@ -42,22 +42,32 @@ const time = ref("")
 const description = ref("")
 const color = ref("")
 
+const emit = defineEmits(['close-add-task','update-list'])
 
 
 const addTask = ()=>{
-    const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}`
-
+    alertify.confirm(
+        "Add new task",
+        `Are you sure you want to add ${taskName.value}?`,
+        ()=>{
+            const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}`
 const options = {
     method:'POST',
 }
 fetch(url, options)
 .then(res=>console.log(res))
-.then(data=>console.log(data))
+.then(data=>{
+    emit('close-add-task')
+    emit('update-list')
+})
 .catch(err=>console.log(err))
+        },
+        ()=>{
+
+        }
+    )
+
 }
-
-
-const emit = defineEmits(['close-add-task'])
 
 const handleColor = (colorName,c)=>{
 color.value = colorName

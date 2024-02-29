@@ -7,7 +7,7 @@
             :time="nextTask.time ?? 'No time available'"
             :date="nextTask.date ?? 'No date available'"
             :id="nextTask.id ?? 'No id available'"
-             />
+            />
         </section>
         <TaskSection />
         <section class="add_task_c">
@@ -18,7 +18,8 @@
             </div>
         </section>
         <div v-if="addtaskIsOpen == true" ref="addTaskContainer" >
-            <AddTaskForm @close-add-task = 'addtaskIsOpen = false'/>
+            <AddTaskForm @close-add-task = 'addtaskIsOpen = false'
+            @update-list="loadData"/>
         </div>
         <div v-if="navBarIsOpen == true">
             <NavBarComponent  @close-navbar="toggleNavBar"/>  
@@ -57,8 +58,8 @@ const props = defineProps(
 )
 const nextTask = ref(null)
 
-onMounted(()=>{
-    const url='http://localhost:8080/api/clients'
+const  loadData = ()=>{
+const url='http://localhost:8080/api/clients'
     fetch(url)
     .then(res=>res.json())
     .then(data=>{
@@ -66,6 +67,10 @@ onMounted(()=>{
         nextTask.value=data[0].taskList[0]
         })
     .catch(err=>console.log(err))
+}
+
+onMounted(()=>{
+    loadData()
 })
 
 const handleResize = () => {
