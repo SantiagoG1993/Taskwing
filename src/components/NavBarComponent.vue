@@ -1,52 +1,34 @@
 <template>
     <div class="nav_main_container" ref="main_container">
+        <button @click="handleClick">prueba</button>
         <img src="../assets/logo.png" alt="" id="logo">
         <h1 id="taskwing_title">TASKWING</h1>
         <h2 id="filters_title">Filters</h2>
         <div class="filter_container">
             <h3>Filter by date</h3>
             <hr>
-            <h4 class="from_to">From: <input type="date" class="date"></h4>
-            <h4 class="from_to">To:<input type="date" class="date"></h4>
+            <h4 class="from_to">From: <input type="date" class="date" v-model="fromDate" @change="handleFromDate"></h4>
+            <h4 class="from_to">To:<input type="date" class="date" v-model="toDate"  @change="handleToDate"></h4>
         </div>
         <div class="filter_container">
             <h3>Filter by time</h3>
             <hr>
-            <h4 class="from_to">From: <input type="time" class="time"></h4>
-            <h4 class="from_to">To:<input type="time" class="time"></h4>
+            <h4 class="from_to">From: <input type="time" class="time" v-model="fromTime"  @change="handleFromTime"></h4>
+            <h4 class="from_to">To:<input type="time" class="time" v-model="toTime"  @change="handleToTime"></h4>
         </div>
         <div class="filter_container">
             <h3>Filter by category</h3>
             <hr>
-            <form action="">
-                <label for="">
-                    <input type="checkbox">Default
+            <label v-for="category in categories" :key="category">
+                    <input type="checkbox" v-model="selectedCategories" :value="category.toUpperCase()" @change="handleCategories"> {{ category }}
                 </label>
-                <label for="">
-                    <input type="checkbox">Call
-                </label>
-                <label for="">
-                    <input type="checkbox">Meeting
-                </label>
-                <label for="">
-                    <input type="checkbox">Home
-                </label>
-            </form>
         </div>
         <div class="filter_container">
             <h3>Filter by State</h3>
             <hr>
-            <form action="">
-                <label for="">
-                    <input type="checkbox">Pending
+           <label v-for="state in states" :key="state">
+                    <input type="checkbox" v-model="selectedState" :value="state.toUpperCase()" @change="handleState"> {{ state }}
                 </label>
-                <label for="">
-                    <input type="checkbox">Finished
-                </label>
-                <label for="">
-                    <input type="checkbox">Deleted
-                </label>
-            </form>
         </div>
     </div>
 </template>
@@ -54,10 +36,44 @@
 <script setup>
 import {ref, defineEmits} from 'vue';
 import {onClickOutside} from '@vueuse/core';
+import {useStore} from 'vuex';
 
+const fromDate = ref('')
+const toDate = ref('')
+const fromTime = ref('')
+const toTime = ref('')
+const selectedCategories = ref([])
+const selectedState = ref([])
+
+const store = useStore();
+
+const categories = ['Default', 'Personal', 'Meeting', 'Urgent'];
+const states = ['Pending','Finished','Deleted']
+const handleClick = ()=>{
+    console.log(fromDate.value+ " "+toDate.value +" " + fromTime.value + " " + toTime.value + " " + selectedCategories.value + " " +selectedState.value )
+}
 const emit = defineEmits(['close-navbar'])
 
 const main_container = ref(null);
+
+const handleFromDate = ()=>{
+    store.commit('setFromDate',fromDate.value)
+}
+const handleToDate = ()=>{
+    store.commit('setToDate',toDate.value)
+}
+const handleFromTime = ()=>{
+    store.commit('setFromTime',fromTime.value)
+}
+const handleToTime = ()=>{
+    store.commit('setToTime',toTime.value)
+}
+const handleCategories = ()=>{
+    store.commit('setCategory',selectedCategories.value)
+}
+const handleState = ()=>{
+    store.commit('setState',selectedState.value)
+}
 
 onClickOutside(main_container,()=>{
 emit('close-navbar')

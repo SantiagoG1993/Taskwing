@@ -65,6 +65,8 @@
 
 <script setup>
 import {ref, onMounted,computed} from 'vue'
+import ClientService from '../services/ClientService'
+import { useStore } from 'vuex';
 import Task from '../components/Task.vue'
 
 const todayIsOpen = ref(true)
@@ -79,6 +81,13 @@ const filteredTasks = computed(()=>{
   }else{
     return clientTaskList.value.filter(t=>t.category == selectedCategory.value)
   }
+})
+
+const store = useStore();
+
+const filterData = computed(()=>{
+    console.log(store.getters.getData)
+    return store.getters.getData
 })
 
 
@@ -118,19 +127,22 @@ const otherTasks = computed(() => {
 });
 
 
-
+const service = new ClientService()
 
 onMounted(()=>{
-const url = 'http://localhost:8080/api/clients'
+/* const url = 'http://localhost:8080/api/clients'
 fetch(url)
 .then(res=>res.json())
 .then(data=> {
     const cData = data[0].taskList
     clientData.value=cData;
     clientTaskList.value = cData
+    
 }
 )
-.catch(err=>console.log(err))
+.catch(err=>console.log(err)) */
+service.fetchAll()
+console.log(service.getClient())
 })
 
 const handleToday = ()=>{
