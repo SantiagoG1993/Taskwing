@@ -12,15 +12,19 @@ class ClientService {
     }
 
 
-    fetchAll(){
-        const url = 'http://localhost:8080/api/clients'
-        fetch(url)
+    async fetchAll(){
+        try{
+            const url = 'http://localhost:8080/api/clients'
+        await fetch(url)
         .then(res=>res.json())
         .then(data=> {
-            client = data[0]
+            this.client.value = data[0].taskList
         }
 )
-.catch(err=>console.log(err))
+        }catch(error){
+            console.log(error)
+        }
+
     }
 
 }

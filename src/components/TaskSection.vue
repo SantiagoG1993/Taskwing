@@ -128,21 +128,12 @@ const otherTasks = computed(() => {
 
 
 const service = new ClientService()
-
-onMounted(()=>{
-/* const url = 'http://localhost:8080/api/clients'
-fetch(url)
-.then(res=>res.json())
-.then(data=> {
-    const cData = data[0].taskList
-    clientData.value=cData;
-    clientTaskList.value = cData
-    
-}
-)
-.catch(err=>console.log(err)) */
-service.fetchAll()
-console.log(service.getClient())
+onMounted( async ()=>{
+await service.fetchAll()
+.then(()=>{
+    clientTaskList.value = service.getClient()._value
+    return service.getClient;
+})
 })
 
 const handleToday = ()=>{
