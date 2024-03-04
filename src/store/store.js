@@ -8,7 +8,7 @@ export default createStore({
             fromTime:'',
             toTime:'',
             category:'',
-            state:''
+            state:'' 
         }
     },
     getters: {

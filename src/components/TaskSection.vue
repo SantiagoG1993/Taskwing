@@ -75,23 +75,69 @@ const otherIsOpen = ref(true)
 const clientData = ref(null)
 const selectedCategory = ref('ALL')
 const clientTaskList =ref([])
-/* const filteredTasks = computed(()=>{
-  if(selectedCategory.value == 'ALL'){
-    return clientTaskList.value
-  }else{
-    return clientTaskList.value.filter(t=>t.category == selectedCategory.value)
-  }
-}) */
 
 const filteredTasks = computed(()=>{
-    const { fromDate, toDate, fromTime, toTime, category, state } = filterData.value;
-//filtrado por categoria
-let filteredByCategory = clientTaskList.value.filter(t=>t.category == category)
-//filtrado por estado
-let filteredByState = filteredByCategory.filter(t=> t.state == state[0])
-console.log(state[0])
-return filteredByState
+//datos
+        const { fromDate, toDate, fromTime, toTime, category, state } = filterData.value;
+
+//filtro categoria
+    let filteredByCategory = clientTaskList.value;
+
+if(selectedCategory.value == 'ALL'){
+    filteredByCategory = clientTaskList.value;
+
+}else{
+    filteredByCategory = filteredByCategory.filter(t=>t.category == selectedCategory.value)
+}
+    const fromDateObj = new Date(fromDate);
+    const toDateObj = new Date(toDate);
+
+    const fromTimeFormatted = `${fromTime}:00`;
+    const toTimeFormatted = `${toTime}:00`;
+
+//filtro fecha
+    let filteredByDate = filteredByCategory.filter(t => {
+        if(!fromDate || !toDate){
+            return filteredByCategory
+        }else{
+        const taskDate = new Date(t.date);
+        return taskDate >= fromDateObj && taskDate <= toDateObj;
+        }
+    });
+//filtro hora
+    let filteredByTime = filteredByDate.filter(t => {
+        if(!fromTime && !toTime){
+            return filteredByDate
+        }else{
+            const taskTime = new Date(`2000-01-01T${t.time}`);
+            const fromTimeObj = new Date(`2000-01-01T${fromTimeFormatted}`);
+            const toTimeObj = new Date(`2000-01-01T${toTimeFormatted}`);
+            return taskTime >= fromTimeObj && taskTime <= toTimeObj;
+        }
+    });
+//filtro categoria navbar
+let filteredByCategoryNav = filteredByTime.filter(t=>{
+    if(!category[0]){
+    return filteredByTime
+    }else{
+        return t.category == category
+    }
+    
 })
+//filtro estado
+let filteredByState = filteredByCategoryNav.filter(t=>{
+    console.log(state[0])
+    if(!state[0]){
+        return filteredByCategoryNav
+    }else{
+    return t.state == state
+    }
+})
+
+return filteredByState;
+}) 
+
+
 
 const store = useStore();
 

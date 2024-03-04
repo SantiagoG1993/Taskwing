@@ -28,7 +28,7 @@
             <hr>
            <label v-for="state in states" :key="state">
                     <input type="checkbox" v-model="selectedState" :value="state.toUpperCase()" @change="handleState"> {{ state }}
-                </label>
+            </label>
         </div>
     </div>
 </template>
@@ -49,6 +49,7 @@ const store = useStore();
 
 const categories = ['Default', 'Personal', 'Meeting', 'Urgent'];
 const states = ['Pending','Finished','Deleted']
+
 const handleClick = ()=>{
     console.log(fromDate.value+ " "+toDate.value +" " + fromTime.value + " " + toTime.value + " " + selectedCategories.value + " " +selectedState.value )
 }
