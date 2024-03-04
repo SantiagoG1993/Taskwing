@@ -18,22 +18,26 @@ export default createStore({
     },
     mutations: {
     setFromDate(state,value){
-        state.filterData.fromDate = value;
-    },
+        state.filterData.fromDate = value;    },
     setToDate(state,value){
         state.filterData.toDate = value;
+    
     },
     setFromTime(state,value){
         state.filterData.fromTime = value;
+    
     },
     setToTime(state,value){
         state.filterData.toTime = value;
+    
     },
     setCategory(state,value){
         state.filterData.category = value;
+    
     },
     setState(state,value){
         state.filterData.state = value;
+    
     }
     },
     actions: {

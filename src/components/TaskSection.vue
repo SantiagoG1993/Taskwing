@@ -59,7 +59,7 @@
             @finish-task="actualizarTaskListFinished(task.id)"
             />           
         </div>
-        
+        {{filterData.fromDate}}
     </div>
 </template>
 
@@ -75,12 +75,22 @@ const otherIsOpen = ref(true)
 const clientData = ref(null)
 const selectedCategory = ref('ALL')
 const clientTaskList =ref([])
-const filteredTasks = computed(()=>{
+/* const filteredTasks = computed(()=>{
   if(selectedCategory.value == 'ALL'){
     return clientTaskList.value
   }else{
     return clientTaskList.value.filter(t=>t.category == selectedCategory.value)
   }
+}) */
+
+const filteredTasks = computed(()=>{
+    const { fromDate, toDate, fromTime, toTime, category, state } = filterData.value;
+//filtrado por categoria
+let filteredByCategory = clientTaskList.value.filter(t=>t.category == category)
+//filtrado por estado
+let filteredByState = filteredByCategory.filter(t=> t.state == state[0])
+console.log(state[0])
+return filteredByState
 })
 
 const store = useStore();
@@ -89,6 +99,7 @@ const filterData = computed(()=>{
     console.log(store.getters.getData)
     return store.getters.getData
 })
+
 
 
 const actualizarTaskList = (id)=>{
@@ -132,6 +143,7 @@ onMounted( async ()=>{
 await service.fetchAll()
 .then(()=>{
     clientTaskList.value = service.getClient()._value
+    console.log(service.getClient()._value)
     return service.getClient;
 })
 })
