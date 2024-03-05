@@ -76,9 +76,11 @@ const clientData = ref(null)
 const selectedCategory = ref('ALL')
 const clientTaskList =ref([])
 
+
+
 const filteredTasks = computed(()=>{
 //datos
-        const { fromDate, toDate, fromTime, toTime, category, state } = filterData.value;
+        const { fromDate, toDate, fromTime, toTime, category, state, color } = filterData.value;
 
 //filtro categoria
     let filteredByCategory = clientTaskList.value;
@@ -128,13 +130,22 @@ let filteredByCategoryNav = filteredByTime.filter(t=>{
 let filteredByState = filteredByCategoryNav.filter(t=>{
     console.log(state[0])
     if(!state[0]){
-        return filteredByCategoryNav
+        return t.state != 'FINISHED'
     }else{
+        console.log(state)
     return t.state == state
     }
 })
-
-return filteredByState;
+// filtro color
+let filteredeByColor = filteredByState.filter(t=>{
+    console.log(color)
+    if(!color){
+        return filteredByState
+    }else{
+        return t.color == color
+    }
+})
+return filteredeByColor;
 }) 
 
 
@@ -158,33 +169,54 @@ const actualizarTaskListFinished = (taskId) => {
 
 
 
+
+
+
+
 const tasksFromToday = computed(() => {
+    const {state} =filterData.value
     if (!clientTaskList.value) return null;
     const dateToday = new Date().toISOString().split('T')[0];
+if(state!= 'FINISHED'){
+return filteredTasks.value.filter(task => task.date === dateToday && !task.deleted && task.state == 'PENDING' );
 
-    return filteredTasks.value.filter(task => task.date === dateToday && !task.delete && task.state == 'PENDING' );
+}else{
+    return filteredTasks.value.filter(task => task.date === dateToday && !task.deleted );
+
+}
 });
 
 const tasksFromTomorrow = computed(() => {
+    const {state} =filterData.value
     if (!clientTaskList.value) return null;
     const tomorrowDate = new Date();
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
+if(state != 'FINISHED'){
     return filteredTasks.value.filter(task => task.date === dateTomorrow && !task.deleted  && task.state == 'PENDING');
+
+}else{
+return filteredTasks.value.filter(task => task.date === dateTomorrow && !task.deleted);   
+}
 });
 
 const otherTasks = computed(() => {
+    const {state} =filterData.value
     if (!clientTaskList.value) return null;
     const dateToday = new Date().toISOString().split('T')[0];
     const tomorrowDate = new Date();
     tomorrowDate.setDate(tomorrowDate.getDate() + 1);
     const dateTomorrow = tomorrowDate.toISOString().split('T')[0];
-
-    return filteredTasks.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted && task.state == 'PENDING');
+    if(state != 'FINISHED'){
+        return filteredTasks.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted && task.state == 'PENDING');
+    }else{
+        return filteredTasks.value.filter(task => task.date !== dateTomorrow && task.date !== dateToday && !task.deleted);
+    }
 });
 
 
 const service = new ClientService()
+
 onMounted( async ()=>{
 await service.fetchAll()
 .then(()=>{

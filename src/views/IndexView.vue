@@ -58,16 +58,37 @@ const props = defineProps(
 )
 const nextTask = ref(null)
 
-const  loadData = ()=>{
-const url='http://localhost:8080/api/clients'
+
+const loadData = () => {
+    const url = 'http://localhost:8080/api/clients';
     fetch(url)
-    .then(res=>res.json())
-    .then(data=>{
-        console.log(data[0].taskList[0].taskName);
-        nextTask.value=data[0].taskList[0]
+        .then(res => res.json())
+        .then(data => {
+            const now = new Date();
+            let closestTask = null;
+            let closestTimeDifference = Infinity;
+            let taskList = data[0].taskList.filter(t=>t.state == 'PENDING')
+
+            for (const task of taskList) {
+                const taskDateTime = new Date(`${task.date}T${task.time}`);
+                const timeDifference = taskDateTime - now;
+
+                if (timeDifference > 0 && timeDifference < closestTimeDifference) {
+                    closestTask = task;
+                    closestTimeDifference = timeDifference;
+                }
+            }
+            if (closestTask) {
+                nextTask.value = closestTask;
+            } else {
+                console.log("No hay tareas futuras.");
+            }
         })
-    .catch(err=>console.log(err))
+        .catch(error => {
+            console.error("Error al cargar los datos:", error);
+        });
 }
+
 
 onMounted(()=>{
     loadData()

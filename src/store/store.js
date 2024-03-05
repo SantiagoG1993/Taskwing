@@ -8,7 +8,8 @@ export default createStore({
             fromTime:'',
             toTime:'',
             category:'',
-            state:'' 
+            state:'',
+            color:'', 
         }
     },
     getters: {
@@ -37,7 +38,9 @@ export default createStore({
     },
     setState(state,value){
         state.filterData.state = value;
-    
+    },
+    setColor(state,value){
+state.filterData.color = value;
     }
     },
     actions: {

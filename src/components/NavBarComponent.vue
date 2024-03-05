@@ -24,11 +24,22 @@
                 </label>
         </div>
         <div class="filter_container">
-            <h3>Filter by State</h3>
+            <h3>Filter by state</h3>
             <hr>
-           <label v-for="state in states" :key="state">
+        <label v-for="state in states" :key="state">
                     <input type="checkbox" v-model="selectedState" :value="state.toUpperCase()" @change="handleState"> {{ state }}
             </label>
+        </div>
+        <div class="filter_container">
+            <h3>Filter by color</h3>
+            <hr>
+        <section class="color_select_c" ref="color_c">
+            <div class="color_option color1" @click="handleColor('RED','color1')"></div>
+            <div class="color_option color2" @click="handleColor('ORANGE','color2')"></div>
+            <div class="color_option color3" @click="handleColor('GREEN','color3')"></div>
+            <div class="color_option color4" @click="handleColor('YELLOW','color4')"></div>
+            <div class="color_option color5" @click="handleColor('GREY','color5')"></div>
+        </section>
         </div>
     </div>
 </template>
@@ -44,6 +55,7 @@ const fromTime = ref('')
 const toTime = ref('')
 const selectedCategories = ref([])
 const selectedState = ref([])
+const color_c = ref(null)
 
 const store = useStore();
 
@@ -76,16 +88,74 @@ const handleState = ()=>{
     store.commit('setState',selectedState.value)
 }
 
+const handleColor = (colorName,c)=>{
+store.commit('setColor',colorName)
+
+const allColors =document.querySelectorAll('.color_option')
+allColors.forEach(c => c.classList.remove('selected-color'))
+
+const e = document.querySelector(`.${c}`)
+e.classList.add("selected-color")
+}
 onClickOutside(main_container,()=>{
 emit('close-navbar')
 console.log('click afuera')
 })
-
+onClickOutside(color_c,()=>{
+    store.commit('setColor','')
+    const allColors =document.querySelectorAll('.color_option')
+    allColors.forEach(c => c.classList.remove('selected-color'))   
+})
 </script>
 
 <style scoped>
+.color_select_c{
+    margin-top: 20px!important;
+    border-radius: 3px;
+    width: 90%;
+    height: 49px;
+    background-color: #93212E;
+    box-shadow: var(--boxshadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-left: 4%!important;
+}
+#color_title{
+    font-family: var(--font2);
+    color: white;
+    font-weight: 400;
+    font-size: 20px;
+}
+.color_option{
+    width: 25px;
+    height: 50%;
+    border-radius: 3px;
+}
+.color_option:hover{
+    border: 1px solid white;
+    cursor: pointer;
+}
+.color1{
+        background-color: #C32E3B;
+}
+.color2{
+        background-color: #E78231;
+}
+.color3{
+        background-color: #4EAC94;
+}
+.color4{
+        background-color: #F3BC47;
+}
+.color5{
+        background-color: #514D4D;
+}
 #logo,#taskwing_title{
     display: none;
+}
+.selected-color{
+    border: 1px solid white;
 }
 .nav_main_container{
     user-select: none;
