@@ -18,6 +18,7 @@
         <div class="today_c" v-if="todayIsOpen == true && tasksFromToday.length >0 ">
             <Task v-for="task in tasksFromToday" 
             :key="task.id"
+            :category="task.category"
             :state="task.state"
             :id="task.id" 
             :taskName="task.taskName" 
@@ -34,6 +35,7 @@
         <div class="today_c" v-if="tomorrowIsOpen == true  && tasksFromTomorrow.length >0">
             <Task v-for="task in tasksFromTomorrow" 
             :key="task.id" 
+            :category="task.category"
             :state="task.state"
             :id="task.id" 
             :taskName="task.taskName" 
@@ -49,6 +51,7 @@
         <div class="today_c" v-if="otherIsOpen == true && otherTasks.length >0" > 
             <Task v-for="task in otherTasks" 
             :key="task.id"
+            :category="task.category"
             :state="task.state" 
             :id="task.id" 
             :taskName="task.taskName" 

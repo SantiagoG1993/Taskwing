@@ -4,6 +4,7 @@
             <i class="fa-solid fa-bars" @click="toggleNavBar"></i>
             <NextTaskComponent
             :taskName="nextTask.taskName ?? 'No task available'" 
+            :remaining="remainingTime ?? 'Not available'"
             :time="nextTask.time ?? 'No time available'"
             :date="nextTask.date ?? 'No date available'"
             :id="nextTask.id ?? 'No id available'"
@@ -51,6 +52,7 @@ import NavBarComponent from '../components/NavBarComponent.vue'
 const addtaskIsOpen = ref(false);
 const navBarIsOpen = ref(true);
 const addTaskContainer = ref(null)
+const remainingTime = ref('')
 const props = defineProps(
     {
     isVisible:Boolean   
@@ -72,6 +74,24 @@ const loadData = () => {
             for (const task of taskList) {
                 const taskDateTime = new Date(`${task.date}T${task.time}`);
                 const timeDifference = taskDateTime - now;
+                
+/* let days, hours, minutes;
+
+if (timeDifference >= 0) {
+    days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+} else {
+    // Si la diferencia de tiempo es negativa, ajusta el cálculo para considerar el día actual
+    const adjustedTimeDifference = Math.abs(timeDifference); // Tomamos el valor absoluto para asegurarnos de obtener un número positivo
+    days = Math.floor(adjustedTimeDifference / (1000 * 60 * 60 * 24));
+    hours = Math.floor((adjustedTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    minutes = Math.floor((adjustedTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
+}
+
+remainingTime.value = `${days} Días, ${hours} Horas, ${minutes} Minutos`; */
+
 
                 if (timeDifference > 0 && timeDifference < closestTimeDifference) {
                     closestTask = task;
@@ -80,6 +100,17 @@ const loadData = () => {
             }
             if (closestTask) {
                 nextTask.value = closestTask;
+                setInterval(() => {
+        const now = new Date();
+        const taskDateTime = new Date(`${nextTask.value.date}T${nextTask.value.time}`);
+        const timeDifference = taskDateTime - now;
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+        remainingTime.value = `${days}d, ${hours}h, ${minutes}m, ${seconds}s`;
+    }, 100); // Actualizar cada segundo
+                
             } else {
                 console.log("No hay tareas futuras.");
             }
@@ -88,6 +119,7 @@ const loadData = () => {
             console.error("Error al cargar los datos:", error);
         });
 }
+
 
 
 onMounted(()=>{

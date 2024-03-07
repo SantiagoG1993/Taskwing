@@ -1,6 +1,6 @@
 <template>
     <div  class="main_container_next_task ">
-        <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">{{props.time}}</span></h3>
+        <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">{{props.remaining}}</span></h3>
         <div class="nextTask_c" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
             <h2 id="taskName">{{props.taskName}}</h2>
             <section class="data_c">
@@ -33,6 +33,7 @@ const props = defineProps({
 taskName:String,
 time:String,
 date:String,
+remaining:String
 })
 
 const editTaskIsOpen = ref(false)
@@ -98,27 +99,7 @@ const finishTask = (id)=>{
         })
     
 }    
-/* 
-const calculateTimeDifference = (nextTaskTime) => {
-    // Obtener la hora actual
-    const now = new Date();
 
-    // Dividir la cadena de hora en partes (horas, minutos, segundos)
-    const [hours, minutes, seconds] = nextTaskTime.split(':').map(Number);
-
-    // Construir un objeto de fecha y hora con la hora proporcionada y la fecha actual
-    const nextTask = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds);
-
-    // Calcular la diferencia de tiempo
-    const timeDifference = nextTask - now;
-
-    // Convertir la diferencia de tiempo a horas, minutos y segundos
-    const hoursDiff = Math.floor(timeDifference / (1000 * 60 * 60));
-    const minutesDiff = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-    const secondsDiff = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-    return `${hoursDiff}:${minutesDiff}:${secondsDiff}`;
-}; */
 
 </script>
 

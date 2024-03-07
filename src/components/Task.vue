@@ -5,7 +5,7 @@
         <section class="data_c">
                 <h3 id="time"><i class="fa-solid fa-clock clock2"></i>{{props.time.slice(0,-3)}}</h3>
                 <h3 id="date"><i class="fa-solid fa-calendar"></i>{{props.date.slice(5)}}</h3>
-                <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
+                <h3 id="category"><i class="fa-solid fa-star"></i>{{props.category}}</h3>
         </section>
     </div>
         <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse (true)" :style="{ backgroundColor: getColor(props.color) }"  >
@@ -109,7 +109,8 @@ const props = defineProps(
         time:String,
         date:String,
         color:String,
-        id:Number
+        id:Number,
+        category:String,
     }
 )
 
