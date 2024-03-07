@@ -1,16 +1,16 @@
 <template>
     <div class="task_info_c">
-        <section class="upper_menu">
+        <section class="upper_menu" :style="{backgroundColor : getColor(props.color)}">
                 <i class="fa-solid fa-arrow-left" @click = 'handleClick' ></i>
-                <h2 id="info_title">Pasear al perro</h2>
+                <h2 id="info_title">{{props.taskName}}</h2>
         </section>   
         <div class="task_description_c">
-            <p id="text_description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa ratione, facilis ipsam illum hic illo ipsum commodi natus, officia dolores error consequatur saepe eaque quos! Velit ipsa deserunt omnis dolores.</p>
+            <p id="text_description">{{props.description}}</p>
         </div>
         <section class="info_data_c">
-            <h3 id="date"><i class="fa-solid fa-calendar"></i>19/08</h3>
-            <h3 id="time"><i class="fa-solid fa-clock clock2"></i>14:30</h3>
-            <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
+            <h3 id="date"><i class="fa-solid fa-calendar"></i>{{props.date}}</h3>
+            <h3 id="time"><i class="fa-solid fa-clock clock2"></i>{{props.time}}</h3>
+            <h3 id="category"><i class="fa-solid fa-star"></i>{{props.category}}</h3>
         </section>
         <div class="edit_task_btn" @click="editTaskIsOpen = true">
             <i class="fa-solid fa-pencil"></i>
@@ -22,15 +22,50 @@
 </template>
 
 <script setup>
-import {defineEmits, ref} from 'vue';
+import {defineEmits, ref,defineProps} from 'vue';
 import EditTask from '../components/EditTask.vue';
 
 const editTaskIsOpen = ref(false)
 
 const emit = defineEmits(['close-info'])
 
+const props = defineProps(
+    {
+        taskName:String,
+        description:String,
+        date:String,
+        color:String,
+        time:String,
+        category:String
+    }
+)
+
 const handleClick = ()=>{
     emit('close-info')
+}
+const color ={
+    RED:'#C32E3B',
+    ORANGE:'#E78231',
+    GREEN:'#4EAC94',
+    YELLOW:'#F3BC47',
+    GREY:'#514D4D'
+}
+
+const getColor = (colorValue) => {
+  switch (colorValue) {
+    case 'RED':
+      return color.RED;
+    case 'ORANGE':
+      return color.ORANGE;
+    case 'GREEN':
+      return color.GREEN;
+    case 'YELLOW':
+      return color.YELLOW;
+    case 'GREY':
+      return color.GREY;
+    default:
+      return color.GREY;
+  }
 }
 </script>
 
@@ -50,7 +85,6 @@ const handleClick = ()=>{
 .upper_menu{
     height: 60px;
     width: 100%;
-background-color: #E78231;
     display: flex;
     color: #820F0F;
     align-items: center;

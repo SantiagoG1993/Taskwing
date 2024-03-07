@@ -14,7 +14,14 @@
             <i class="fa-solid fa-trash" @click="deleteTask(props.id)"></i>
         </div>
 <div v-if="taskInfoIsOpen == true" class="taskInfo_c" >
-    <TaskInfo @close-info="taskInfoIsOpen = false" />
+    <TaskInfo
+    :taskName="props.taskName"
+    :date="props.date"
+    :time="props.time"
+    :description="props.description"
+    :category="props.category" 
+    :color="props.color"
+    @close-info="taskInfoIsOpen = false" />
 </div>
 <div v-if="editTaskIsOpen == true">
     <EditTask @close-edit-task="editTaskIsOpen = false" />
@@ -99,7 +106,7 @@ const getColor = (colorValue) => {
     case 'GREY':
       return color.GREY;
     default:
-      return color.GREY; // Color por defecto en caso de que el valor no coincida con ninguno de los enumerados
+      return color.GREY;
   }
 }
 const props = defineProps(
@@ -111,6 +118,7 @@ const props = defineProps(
         color:String,
         id:Number,
         category:String,
+        description:String
     }
 )
 

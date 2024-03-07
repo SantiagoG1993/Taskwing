@@ -7,11 +7,11 @@
     <select name="category" id="select_category" v-model="selectedCategory">
         <option value="" disabled>Select category</option>
         <option :value="'ALL'">All</option>
-        <option :value="'DEFAULT'">Default</option>
-        <option :value="'WORK'">Work</option>
-        <option :value="'URGENT'">Urgent</option>
-        <option :value="'PERSONAL'">Personal</option>
-        <option :value="'MEETING'">Meeting</option>
+        <option :value="'Default'">Default</option>
+        <option :value="'Work'">Work</option>
+        <option :value="'Urgent'">Urgent</option>
+        <option :value="'Personal'">Personal</option>
+        <option :value="'Meeting'">Meeting</option>
     </select>
         </div>
         <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
@@ -25,6 +25,7 @@
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
+            :description="task.description"
             @delete-task="actualizarTaskList(task.id)"
             @finish-task="actualizarTaskListFinished(task.id)"
                         />
@@ -42,6 +43,7 @@
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
+            :description="task.description"
             @delete-task="actualizarTaskList(task.id)"
             @finish-task="actualizarTaskListFinished(task.id)"            
             />
@@ -58,6 +60,7 @@
             :time="task.time" 
             :date="task.date" 
             :color="task.color"
+            :description="task.description"
             @delete-task="actualizarTaskList(task.id)"
             @finish-task="actualizarTaskListFinished(task.id)"
             />           
