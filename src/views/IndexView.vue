@@ -5,9 +5,12 @@
             <NextTaskComponent
             :taskName="nextTask.taskName ?? 'No task available'" 
             :remaining="remainingTime ?? 'Not available'"
+            :description="nextTask.description ?? 'No description available'"
+            :category="nextTask.category ?? 'No category available'"
             :time="nextTask.time ?? 'No time available'"
             :date="nextTask.date ?? 'No date available'"
             :id="nextTask.id ?? 'No id available'"
+            :color="nextTask.color ?? 'No color avalaible'"
             />
         </section>
         <TaskSection />

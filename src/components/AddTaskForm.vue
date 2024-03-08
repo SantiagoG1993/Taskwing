@@ -13,12 +13,12 @@
                 <input type="time" placeholder="Enter time here" class="input_text" v-model="time">
                 <input type="text" placeholder="Description" id="input_description" v-model="description">
                 <label for="category" id="category">Category</label>
-                <select name="category" id="select_category">
-                    <option value="">Default</option>
-                    <option value="">Call</option>
-                    <option value="">Meeting</option>
+                <select name="category" id="select_category"  v-model="selectedCategory">
+                    <option v-for="category in categories" :value="category" :key="category">{{category}}</option>
+                    <option value="" @click="showAddCategory = true">Add category</option>
                 </select>
         </form>
+                <input v-if="showAddCategory == true" type="text" id="add_category_input" v-model="selectedCategory">
         <section class="color_select_c">
             <h2 id="color_title">Color</h2>
             <div class="color_option color1" @click="handleColor('RED','color1')"></div>
@@ -34,14 +34,16 @@
 </template>
 
 <script setup>
-import {ref,defineEmits} from 'vue';
+import {ref,defineEmits, onMounted} from 'vue';
 
+const showAddCategory=ref(false)
+const categories=ref([])
 const taskName = ref("")
 const date = ref("")
 const time = ref("")
 const description = ref("")
 const color = ref("")
-
+const selectedCategory=ref('')
 const emit = defineEmits(['close-add-task','update-list'])
 
 
@@ -50,7 +52,7 @@ const addTask = ()=>{
         "Add new task",
         `Are you sure you want to add ${taskName.value}?`,
         ()=>{
-            const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}`
+            const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}&category=${selectedCategory.value}`
 const options = {
     method:'POST',
 }
@@ -83,11 +85,18 @@ e.classList.add("selected-color")
 const handleClick  = ()=>{
     emit('close-add-task')
 }
-
+onMounted(()=>{
+    const url = 'http://localhost:8080/api/categories'
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>categories.value=data)
+    .catch(err=>console.log(err))
+})
 
 </script>
 
 <style scoped>
+
 .addTask_main_container{
     width: 100%;
     height: 100vh;
@@ -159,6 +168,20 @@ label{
     border-radius: 3px;
 }
 #input_description:focus{
+    outline: none;
+}
+#add_category_input{
+    position: absolute;
+    right: 12%;
+    top: 60px;
+    height: 40px;
+    width: 25%;
+    background-color: #ededed;
+    border: none;
+    border-radius: 4px;
+    padding-left: 20px!important;
+}
+#add_category_input:focus{
     outline: none;
 }
 #select_category{

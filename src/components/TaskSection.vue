@@ -5,13 +5,8 @@
             <label for="select_category" id_cat>Category</label>
             <hr>
     <select name="category" id="select_category" v-model="selectedCategory">
-        <option value="" disabled>Select category</option>
-        <option :value="'ALL'">All</option>
-        <option :value="'Default'">Default</option>
-        <option :value="'Work'">Work</option>
-        <option :value="'Urgent'">Urgent</option>
-        <option :value="'Personal'">Personal</option>
-        <option :value="'Meeting'">Meeting</option>
+        <option value="ALL">All</option>
+        <option v-for="category in categories" :key="category" :value="category">{{category}}</option>
     </select>
         </div>
         <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
@@ -81,6 +76,7 @@ const otherIsOpen = ref(true)
 const clientData = ref(null)
 const selectedCategory = ref('ALL')
 const clientTaskList =ref([])
+const categories = ref([])
 
 
 
@@ -230,6 +226,11 @@ await service.fetchAll()
     console.log(service.getClient()._value)
     return service.getClient;
 })
+const url = 'http://localhost:8080/api/categories'
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>categories.value=data)
+    .catch(err=>console.log(err))
 })
 
 const handleToday = ()=>{

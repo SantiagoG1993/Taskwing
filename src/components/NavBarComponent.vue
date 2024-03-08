@@ -1,6 +1,5 @@
 <template>
     <div class="nav_main_container" ref="main_container">
-        <button @click="handleClick">prueba</button>
         <img src="../assets/logo.png" alt="" id="logo">
         <h1 id="taskwing_title">TASKWING</h1>
         <h2 id="filters_title">Filters</h2>
@@ -20,7 +19,7 @@
             <h3>Filter by category</h3>
             <hr>
             <label v-for="category in categories" :key="category">
-                    <input type="checkbox" v-model="selectedCategories" :value="category.toUpperCase()" @change="handleCategories"> {{ category }}
+                    <input type="checkbox" v-model="selectedCategories" :value="category" @change="handleCategories"> {{ category }}
                 </label>
         </div>
         <div class="filter_container">
@@ -45,10 +44,11 @@
 </template>
 
 <script setup>
-import {ref, defineEmits} from 'vue';
+import {ref, defineEmits,onMounted} from 'vue';
 import {onClickOutside} from '@vueuse/core';
 import {useStore} from 'vuex';
 
+const categories = ref([])
 const fromDate = ref('')
 const toDate = ref('')
 const fromTime = ref('')
@@ -59,7 +59,6 @@ const color_c = ref(null)
 
 const store = useStore();
 
-const categories = ['Default', 'Personal', 'Meeting', 'Urgent'];
 const states = ['Pending','Finished','Deleted']
 
 const handleClick = ()=>{
@@ -106,6 +105,13 @@ onClickOutside(color_c,()=>{
     const allColors =document.querySelectorAll('.color_option')
     allColors.forEach(c => c.classList.remove('selected-color'))   
 })
+onMounted(()=>{
+    const url = 'http://localhost:8080/api/categories'
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>categories.value=data)
+    .catch(err=>console.log(err))
+})
 </script>
 
 <style scoped>
@@ -113,7 +119,7 @@ onClickOutside(color_c,()=>{
     margin-top: 20px!important;
     border-radius: 3px;
     width: 90%;
-    height: 49px;
+    height: 40px;
     background-color: #93212E;
     box-shadow: var(--boxshadow);
     display: flex;
@@ -121,17 +127,18 @@ onClickOutside(color_c,()=>{
     justify-content: space-around;
     margin-left: 4%!important;
 }
+.color_option{
+    width: 20px;
+    height: 50%;
+    border-radius: 3px;
+}
 #color_title{
     font-family: var(--font2);
     color: white;
     font-weight: 400;
     font-size: 20px;
 }
-.color_option{
-    width: 25px;
-    height: 50%;
-    border-radius: 3px;
-}
+
 .color_option:hover{
     border: 1px solid white;
     cursor: pointer;
@@ -161,8 +168,8 @@ onClickOutside(color_c,()=>{
     user-select: none;
     position: fixed;
     top: 0px;
-    width: 235px;
-    height: 90vh;
+    width: 250px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -236,6 +243,16 @@ input{
     flex-direction: column;
     align-items: center;
     background-color: var(--color1);
+}
+.color_select_c{
+    height: 49px;
+    background-color: #93212E;
+    margin-left: 4%!important;
+}
+.color_option{
+    width: 25px;
+    height: 50%;
+    border-radius: 3px;
 }
 .filter_container{
     min-height: 120px;

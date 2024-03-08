@@ -1,7 +1,7 @@
 <template>
     <div  class="main_container_next_task ">
         <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">{{props.remaining}}</span></h3>
-        <div class="nextTask_c" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false">
+        <div class="nextTask_c" :style="{backgroundColor : getColor(props.color)}" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false" @click="openTaskInfo" >
             <h2 id="taskName">{{props.taskName}}</h2>
             <section class="data_c">
                 <h3 id="time"><i class="fa-solid fa-clock clock2"></i>{{props.time}}</h3>
@@ -9,10 +9,20 @@
                 <h3 id="category"><i class="fa-solid fa-star"></i>Default</h3>
             </section>
         </div>
-        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse(true)">
+        <div v-if="subPanelIsOpen == true" class="subpanel" :style="{backgroundColor : getColor(props.color)}" @mouseover="handleMouse(true)">
             <i class="fa-solid fa-pencil" @click="editTaskIsOpen = true"></i>
             <i class="fa-solid fa-flag-checkered" @click="finishTask(props.id)"></i>
             <i class="fa-solid fa-trash" @click="deleteTask(props.id)"></i>
+        </div>
+        <div v-if="taskInfoIsOpen == true" class="taskInfo_c" >
+            <TaskInfo
+            :taskName="props.taskName"
+            :date="props.date"
+            :time="props.time"
+            :description="props.description"
+            :category="props.category" 
+            :color="props.color"
+            @close-info="taskInfoIsOpen = false" />
         </div>
         <div v-if="editTaskIsOpen == true">
             <EditTask @close-edit-task="editTaskIsOpen = false" />
@@ -23,23 +33,54 @@
 <script setup>
 import {ref,defineEmits,defineProps} from 'vue';
 import EditTask from '../components/EditTask.vue'
+import TaskInfo from '../components/TaskInfo.vue'
 
 
 const emit = defineEmits(['delete-task','finish-task'])
-
+const taskInfoIsOpen = ref(false)
 
 const props = defineProps({
-    id:Number,
+id:Number,
 taskName:String,
 time:String,
 date:String,
-remaining:String
+remaining:String,
+description:String,
+category:String,
+color:String
 })
 
 const editTaskIsOpen = ref(false)
 const subPanelIsOpen = ref(false)
 
+const color ={
+    RED:'#C32E3B',
+    ORANGE:'#E78231',
+    GREEN:'#4EAC94',
+    YELLOW:'#F3BC47',
+    GREY:'#514D4D'
+}
 
+const getColor = (colorValue) => {
+  switch (colorValue) {
+    case 'RED':
+      return color.RED;
+    case 'ORANGE':
+      return color.ORANGE;
+    case 'GREEN':
+      return color.GREEN;
+    case 'YELLOW':
+      return color.YELLOW;
+    case 'GREY':
+      return color.GREY;
+    default:
+      return color.GREY;
+  }
+}
+const openTaskInfo = ()=>{
+    taskInfoIsOpen.value = !taskInfoIsOpen.value
+    console.log(taskInfoIsOpen.value)
+}
 const handleMouse = (boolean) => {
     subPanelIsOpen.value = boolean;
     if (boolean) {
@@ -115,7 +156,6 @@ const finishTask = (id)=>{
     user-select: none;
     width: 95%;
     height: 60px;
-    background-color: #4EAC94 ;
     border-radius: 4px;
     box-shadow: var(--boxshadow);
     display: flex;
@@ -162,6 +202,14 @@ const finishTask = (id)=>{
 .clock1 {
     color: black;
 }
+.taskInfo_c{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 5;
+}
 @media (min-width:1000px){
     .main_container_next_task{
         margin-top: 30px!important;
@@ -184,7 +232,6 @@ const finishTask = (id)=>{
     width: 300px;
     height: 40px;
     border-radius: 3px;
-    background-color: #4EAC94;
     display: flex;
     align-self: flex-end;
     margin-right: 30px!important;
