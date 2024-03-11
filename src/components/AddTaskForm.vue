@@ -74,10 +74,8 @@ fetch(url, options)
 
 const handleColor = (colorName,c)=>{
 color.value = colorName
-
 const allColors =document.querySelectorAll('.color_option')
 allColors.forEach(c => c.classList.remove('selected-color'))
-
 const e = document.querySelector(`.${c}`)
 e.classList.add("selected-color")
 }

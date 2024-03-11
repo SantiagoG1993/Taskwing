@@ -6,41 +6,81 @@
         </section>
         <form action="" class="addtask_form">
             <label for="title">What is to be done?</label>
-                <input type="text" placeholder="Enter task here" class="input_text">
+                <input type="text" placeholder="Enter task here" class="input_text" v-model="taskName">
             <label for="title">Due date</label>
-                <input type="date" placeholder="Enter date here" class="input_text">
+                <input type="date" placeholder="Enter date here" class="input_text" v-model="date">
             <label for="title">Time</label>
-                <input type="time" placeholder="Enter time here" class="input_text">
-                <input type="text" placeholder="Description" id="input_description">
+                <input type="time" placeholder="Enter time here" class="input_text" v-model="time">
+                <input type="text" placeholder="Description" id="input_description" v-model="description">
                 <label for="category">Category</label>
-                <select name="category" id="select_category">
-                    <option value="">Default</option>
-                    <option value="">Call</option>
-                    <option value="">Meeting</option>
+                <select name="category" id="select_category" v-model="selectedCategory">
+                    <option  v-for="category in categories" :key="category" :value="category">{{category}}</option>
                 </select>
         </form>
         <section class="color_select_c">
             <h2 id="color_title">Color</h2>
-            <div class="color_option color1"></div>
-            <div class="color_option color2"></div>
-            <div class="color_option color3"></div>
-            <div class="color_option color4"></div>
-            <div class="color_option color5"></div>
+            <div class="color_option color1" @click="handleColor('RED','color1')"></div>
+            <div class="color_option color2" @click="handleColor('ORANGE','color2')"></div>
+            <div class="color_option color3" @click="handleColor('GREEN','color3')"></div>
+            <div class="color_option color4" @click="handleColor('YELLOW','color4')"></div>
+            <div class="color_option color5" @click="handleColor('GREY','color5')"></div>
         </section>
-        <div class="ok_btn">
+        <div class="ok_btn" @click="editTask">
             <i class="fa-solid fa-check"></i>
         </div>
     </div>
 </template>
 
 <script setup>
-import {defineEmits} from 'vue';
+import {defineEmits,ref, onMounted,defineProps} from 'vue';
+
+const props = defineProps({
+    id:Number
+})
 
 const emit = defineEmits(['close-edit-task'])
+
+const taskName = ref("")
+const date = ref("")
+const time = ref("")
+const description = ref("")
+const color = ref("")
+const selectedCategory=ref('')
+
+const categories = ref([])
+
+
 
 const handleClick = ()=>{
     emit('close-edit-task')
 }
+onMounted(()=>{
+    const url = 'http://localhost:8080/api/categories'
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>categories.value=data)
+    .catch(err=>console.log(err))
+})
+const handleColor = (colorName,c)=>{
+color.value = colorName
+const allColors =document.querySelectorAll('.color_option')
+
+allColors.forEach(c => c.classList.remove('selected-color'))
+
+const e = document.querySelector(`.${c}`)
+e.classList.add("selected-color")
+}
+
+const editTask = ()=>{
+    const url = `http://localhost:8080/api/task/edit?id=${props.id}&taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&category=${selectedCategory.value}&color=${color.value}`
+
+    const options={
+        method:'PATCH',
+    }
+    fetch(url,options)
+    .then(res=>console.log(res))
+    .catch(err=>console.log(err))
+}   
 </script>
 
 <style scoped>
@@ -73,6 +113,9 @@ background-color: #E78231;
 }
 .fa-arrow-left:active{
     color: #FBD990;
+}
+.selected-color{
+    border: 1px solid white;
 }
 #info_title{
     font-family: var(--font2);
@@ -181,6 +224,10 @@ label{
 }
 .ok_btn:active{
     background-color: #c85c65;
+}
+.ok_btn:hover{
+   background-color: #c85c65;
+   cursor: pointer; 
 }
 .ok_btn i {
     font-size: 30px;

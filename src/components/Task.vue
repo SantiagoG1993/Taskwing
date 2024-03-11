@@ -24,7 +24,8 @@
     @close-info="taskInfoIsOpen = false" />
 </div>
 <div v-if="editTaskIsOpen == true">
-    <EditTask @close-edit-task="editTaskIsOpen = false" />
+    <EditTask @close-edit-task="editTaskIsOpen = false"
+    :id="props.id"/>
     </div>
 </div>
 </template>
