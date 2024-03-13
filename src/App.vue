@@ -48,8 +48,8 @@ fetch(url)
     --color1 :#F3BC47;
 } 
 *{
-  margin: 0px!important;
-  padding: 0px!important;
+  margin: 0px;
+  padding: 0px;
   box-sizing: border-box!important;
 }
 </style>

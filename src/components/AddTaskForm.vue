@@ -35,6 +35,7 @@
 
 <script setup>
 import {ref,defineEmits, onMounted} from 'vue';
+import Swal from 'sweetalert2'
 
 const showAddCategory=ref(false)
 const categories=ref([])
@@ -47,30 +48,41 @@ const selectedCategory=ref('')
 const emit = defineEmits(['close-add-task','update-list'])
 
 
-const addTask = ()=>{
-    alertify.confirm(
-        "Add new task",
-        `Are you sure you want to add ${taskName.value}?`,
-        ()=>{
-            const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}&category=${selectedCategory.value}`
-const options = {
-    method:'POST',
-}
-fetch(url, options)
-.then(res=>console.log(res))
-.then(data=>{
-    window.location.reload()
-    emit('close-add-task')
-    emit('update-list')
-})
-.catch(err=>console.log(err))
-        },
-        ()=>{
-
+const addTask = () => {
+    if (!taskName.value.trim() || !description.value.trim() || !time.value.trim() || !date.value.trim() || !color.value.trim() || !selectedCategory.value.trim()) {
+        Swal.fire("All fields are required", "", "warning");
+        return;
+    }
+    Swal.fire({
+        title: "Do you want add this task?",
+        icon:"question",
+        showDenyButton: true,
+        confirmButtonText: "Ok",
+        denyButtonText: `Cancel`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const url = `http://localhost:8080/api/task?taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&color=${color.value}&category=${selectedCategory.value}`;
+            const options = {
+                method: 'POST',
+            };
+            fetch(url, options)
+                .then(res => {
+                    console.log(res);
+                })
+                .then(data => {
+                    window.location.reload();
+                    emit('close-add-task');
+                    emit('update-list');
+                })
+                .catch(err => console.log(err));
+        } else if (result.isDenied) {
+            Swal.fire("Cancelled", "", "info");
         }
-    )
+    });
+};
 
-}
+
+    
 
 const handleColor = (colorName,c)=>{
 color.value = colorName

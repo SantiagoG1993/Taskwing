@@ -25,66 +25,81 @@
 </div>
 <div v-if="editTaskIsOpen == true">
     <EditTask @close-edit-task="editTaskIsOpen = false"
-    :id="props.id"/>
+    :id="props.id"
+    :taskName="props.taskName"/>
     </div>
 </div>
 </template>
 
 <script setup>
 import {ref,defineProps,defineEmits} from 'vue'
+import Swal from 'sweetalert2'
 import TaskInfo from '../components/TaskInfo.vue'
 import EditTask from '../components/EditTask.vue'
 
 const emit = defineEmits(['delete-task','finish-task'])
 
 const deleteTask = (id) => {
-    alertify.confirm(
-        "Eliminar tarea",
-        "¿Estás seguro de que quieres eliminar esta tarea?",
-        () => { 
-            const url = `http://localhost:8080/api/task/delete?id=${id}`;
-            const options = {
-                method: 'PUT',
-            };
-            fetch(url, options)
-                .then(res => {
-                    console.log(res);
-                    emit('delete-task',props.id)
-                    console.log('prueba')
-                })
-                .catch(err => console.log(err));
-        },
-        () => { 
+    Swal.fire(
+        {
+            title:"Delete task?",
+            showConfirmButton:true,
+            showDenyButton:true,
+            denyButtonText:'Cancel',
+            icon:'question'
         }
     )
-    .set('labels', {ok:'Eliminar', cancel:'Cancelar'})
-    .set('transition', 'fade')
-    .set('modal', true)
-    .set('closable', true)
-    .set('movable', false)
-    .set('onshow', function() {
-        this.elements.dialog.style.top = '50%';
-        this.elements.dialog.style.left = '50%';
-        this.elements.dialog.style.transform = 'translate(-50%, -50%)';
-    });
-};
-const finishTask = (id)=>{
-    alertify.confirm(
-        "Finalizar tarea?",
-        "Esta seguro que desa finalizar esta tarea?",
-        ()=>{
-    const url=`http://localhost:8080/api/task/finish?id=${id}`;
-    const options = {method:'PUT'}
-    fetch(url,options)
-    .then(res=>console.log(res))
-    .then(data=>emit('finish-task'))
-    .catch(err=>console.log(err))
-        },
-        ()=>{
+    .then(
+        (result)=>{
+            if(result.isConfirmed){
+                const url = `http://localhost:8080/api/task/delete?id=${id}`;
+                const options = {
+                    method: 'PUT',
+                };
+                fetch(url, options)
+                    .then(res => {
+                        console.log(res);
+                        emit('delete-task',props.id)
+                        console.log('prueba')
+                    })
+                .catch(err => console.log(err));
+                Swal.fire("Successfully deleted","","success")
+            }else if(result.isDenied){
+            Swal.fire("Cancelled","","info")  
+            }
+        }
+    )
+            
+        }
 
-        })
+
+const finishTask = (id)=>{
+    Swal.fire(
+        {
+            title:'Finish this task?',
+            icon:'question',
+            showDenyButton:true,
+            showConfirmButton:true,
+            denyButtonText:'Cancel'
+        }
+    )
+    .then(
+        (result)=>{
+            if(result.isConfirmed){
+                const url=`http://localhost:8080/api/task/finish?id=${id}`;
+                const options = {method:'PUT'}
+                fetch(url,options)
+                .then(res=>console.log(res))
+                .then(data=>emit('finish-task'))
+                .catch(err=>console.log(err))
+                Swal.fire('Task finished','','success')
+            }else if(result.isDenied){
+                Swal.fire('Cancelled','','info')
+            }
+        }
+    )
     
-}
+        }      
 
 const color ={
     RED:'#C32E3B',

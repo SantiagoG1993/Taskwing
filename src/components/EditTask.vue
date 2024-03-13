@@ -2,7 +2,7 @@
     <div class="edit_task_main_container">
         <section class="upper_menu">
                 <i class="fa-solid fa-arrow-left" @click = 'handleClick' ></i>
-                <h2 id="info_title">Edit task</h2>
+                <h2 id="info_title">Edit task ({{props.taskName}})</h2>
         </section>
         <form action="" class="addtask_form">
             <label for="title">What is to be done?</label>
@@ -33,9 +33,11 @@
 
 <script setup>
 import {defineEmits,ref, onMounted,defineProps} from 'vue';
+import Swal from 'sweetalert2'
 
 const props = defineProps({
-    id:Number
+    id:Number,
+    taskName:String
 })
 
 const emit = defineEmits(['close-edit-task'])
@@ -72,14 +74,34 @@ e.classList.add("selected-color")
 }
 
 const editTask = ()=>{
-    const url = `http://localhost:8080/api/task/edit?id=${props.id}&taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&category=${selectedCategory.value}&color=${color.value}`
-
-    const options={
-        method:'PATCH',
+    if (!taskName.value.trim() && !description.value.trim() && !time.value.trim() && !date.value.trim() && !selectedCategory.value.trim() && !color.value.trim()) {
+        Swal.fire("Please fill in at least one field", "", "warning");
+        return;
     }
-    fetch(url,options)
-    .then(res=>console.log(res))
-    .catch(err=>console.log(err))
+    Swal.fire(
+        {
+        title: "Save changes?",
+        icon:"question",
+        showDenyButton: true,
+        confirmButtonText: "Ok",
+        denyButtonText: `Cancel`,
+        }
+    )
+    .then((result)=>{
+        if(result.isConfirmed){
+            const url = `http://localhost:8080/api/task/edit?id=${props.id}&taskName=${taskName.value}&description=${description.value}&time=${time.value}&date=${date.value}&category=${selectedCategory.value}&color=${color.value}`
+            const options={
+                method:'PATCH',
+            }
+        fetch(url,options)
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+        Swal.fire("Changes succesfully saved", "", "success");
+        window.location.reload()
+            }else if(result.isDenied){
+                Swal.fire("Changes are not saved", "", "info");
+            }
+    })   
 }   
 </script>
 

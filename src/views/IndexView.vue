@@ -67,7 +67,11 @@ const nextTask = ref(null)
 const loadData = () => {
     const url = 'http://localhost:8080/api/clients';
     fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            if(res.ok){
+                return res.json()
+            }
+        })
         .then(data => {
             const now = new Date();
             let closestTask = null;
