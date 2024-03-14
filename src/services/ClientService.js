@@ -14,11 +14,11 @@ class ClientService {
 
     async fetchAll(){
         try{
-            const url = 'http://localhost:8080/api/clients'
-        await fetch(url)
+            const url = 'http://localhost:8080/api/client/auth'
+        await fetch(url,{method:"GET",credentials: 'include'})
         .then(res=>res.json())
         .then(data=> {
-            this.client.value = data[0].taskList
+            this.client.value = data.taskList
         }
 )
         }catch(error){

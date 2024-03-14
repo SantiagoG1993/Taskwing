@@ -1,8 +1,9 @@
 <template>
-    <div class="index_c" v-if="isVisible == true"> 
+    <div class="index_c"> 
         <section class="next_task_c">
             <i class="fa-solid fa-bars" @click="toggleNavBar"></i>
             <NextTaskComponent
+                v-if="nextTask"
             :taskName="nextTask.taskName ?? 'No task available'" 
             :remaining="remainingTime ?? 'Not available'"
             :description="nextTask.description ?? 'No description available'"
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-import {ref,defineProps,onMounted} from 'vue';
+import {ref,onMounted} from 'vue';
 import {onClickOutside} from '@vueuse/core'
 import NextTaskComponent from '../components/NextTaskComponent.vue'
 import TaskSection from '../components/TaskSection.vue'
@@ -56,49 +57,28 @@ const addtaskIsOpen = ref(false);
 const navBarIsOpen = ref(true);
 const addTaskContainer = ref(null)
 const remainingTime = ref('')
-const props = defineProps(
-    {
-    isVisible:Boolean   
-    }
-)
+
 const nextTask = ref(null)
 
 
 const loadData = () => {
-    const url = 'http://localhost:8080/api/clients';
-    fetch(url)
+    const url = 'http://localhost:8080/api/client/auth';
+    fetch(url,{method:"GET",credentials: 'include'})
         .then(res => {
             if(res.ok){
                 return res.json()
             }
         })
         .then(data => {
+            console.log(data)
             const now = new Date();
             let closestTask = null;
             let closestTimeDifference = Infinity;
-            let taskList = data[0].taskList.filter(t=>t.state == 'PENDING')
+            let taskList = data.taskList.filter(t=>t.state == 'PENDING')
 
             for (const task of taskList) {
                 const taskDateTime = new Date(`${task.date}T${task.time}`);
                 const timeDifference = taskDateTime - now;
-                
-/* let days, hours, minutes;
-
-if (timeDifference >= 0) {
-    days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-
-} else {
-    // Si la diferencia de tiempo es negativa, ajusta el cálculo para considerar el día actual
-    const adjustedTimeDifference = Math.abs(timeDifference); // Tomamos el valor absoluto para asegurarnos de obtener un número positivo
-    days = Math.floor(adjustedTimeDifference / (1000 * 60 * 60 * 24));
-    hours = Math.floor((adjustedTimeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    minutes = Math.floor((adjustedTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
-}
-
-remainingTime.value = `${days} Días, ${hours} Horas, ${minutes} Minutos`; */
-
 
                 if (timeDifference > 0 && timeDifference < closestTimeDifference) {
                     closestTask = task;

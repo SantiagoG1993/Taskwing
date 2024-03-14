@@ -1,5 +1,5 @@
 <template>
-    <div class="login_c" v-if="isVisible == true">
+    <div class="login_c">
         <section class="logo_c">
             <img src="../assets/logo.png" alt="" id="logo">  
             <h2>TASKWING</h2>
@@ -24,11 +24,11 @@
             <div class="input_main_c">
                 <div class="input_c">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="" id="" placeholder="Email"  class="input" >
+                    <input type="email" name="" id="" placeholder="Email"  class="input" v-model="email" >
                 </div>
                 <div class="input_c">
                     <i class="fa-solid fa-key"></i>
-                    <input type="password" name="" id="" placeholder="Password" class="input">
+                    <input type="password" name="" id="" placeholder="Password" class="input" v-model="password">
                 </div>
                 <div class="forgotp_remember_c">
                     <div id="remember_c">
@@ -40,7 +40,7 @@
             </div>
             
         <div class="btn_c">
-            <button id="login_btn">Login</button>
+            <button id="login_btn" @click="login">Login</button>
             <p>Create account</p>
         </div>
         </section>
@@ -50,13 +50,31 @@
 </template>
 
 <script setup>
-import {defineProps} from 'vue'
+import {ref} from 'vue'
+import router from '../router'
 
-const props = defineProps(
-    {
-        isVisible:Boolean
-    }
-)
+const email = ref('')
+const password = ref('')
+
+const emit=defineEmits(['close-login-view'])
+
+const login = () => {
+    const url = `http://localhost:8080/api/login?email=${email.value}&password=${password.value}`;
+    fetch(url, { method: "POST", credentials: 'include' })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res;
+             // Devuelve la promesa para ser manejada en el siguiente then
+        })
+        .then(data => {
+            console.log(`logged ${email.value} ${password.value}`);
+            router.push('/index');
+        })
+        .catch(err => console.error('Error fetching data:', err)); // Captura y maneja los errores
+}
+
 
 </script>
 ``
