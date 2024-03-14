@@ -1,5 +1,6 @@
 <template>
     <div  class="main_container_next_task ">
+        <p id="welcome">Bienvenido/a {{props.userName}}<i class="fa-solid fa-arrow-right-from-bracket" @click="emit('logout')"></i></p>
         <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">{{props.remaining}}</span></h3>
         <div class="nextTask_c" :style="{backgroundColor : getColor(props.color)}" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false" @click="openTaskInfo" >
             <h2 id="taskName">{{props.taskName}}</h2>
@@ -39,7 +40,7 @@ import EditTask from '../components/EditTask.vue'
 import TaskInfo from '../components/TaskInfo.vue'
 
 
-const emit = defineEmits(['delete-task','finish-task'])
+const emit = defineEmits(['delete-task','finish-task','logout'])
 const taskInfoIsOpen = ref(false)
 
 const props = defineProps({
@@ -50,7 +51,8 @@ date:String,
 remaining:String,
 description:String,
 category:String,
-color:String
+color:String,
+userName:String
 })
 
 const editTaskIsOpen = ref(false)
@@ -92,9 +94,6 @@ const handleMouse = (boolean) => {
         }, 3000);
     }
     }
-
-
-
 const deleteTask = (id) => {
     Swal.fire(
         {
@@ -125,9 +124,6 @@ const deleteTask = (id) => {
         }
     )  
 }
-
-
-
 const finishTask = (id)=>{
     Swal.fire(
         {
@@ -178,6 +174,8 @@ const finishTask = (id)=>{
     align-items: center;
     justify-content: center;
     gap: 6px;
+}#welcome{
+    display: none;
 }
 .clock2{
     color: white;
@@ -212,7 +210,7 @@ const finishTask = (id)=>{
 }
 #watch{
     font-weight: bold;
-    font-size: 22px;
+    font-size: 16px;
 }
 .clock1 {
     color: black;
@@ -261,6 +259,33 @@ const finishTask = (id)=>{
 .subpanel i:hover{
     color: #474747;
     cursor: pointer;
+}
+#watch{
+    font-size: 22px;
+}
+#welcome{
+    font-family: var(--font1);
+    align-self: flex-end;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+#welcome i{
+    font-size:20px;
+    color: rgb(54, 54, 54);
+    background-color: rgb(206, 206, 206);
+    border-radius: 6px;
+    width: 80px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#welcome i:hover{
+    cursor: pointer;
+color:white;
+background-color: var(--color1);
+box-shadow: var(--boxshadow);
 }
 }
 </style>

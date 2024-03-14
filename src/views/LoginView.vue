@@ -66,7 +66,6 @@ const login = () => {
                 throw new Error('Network response was not ok');
             }
             return res;
-             // Devuelve la promesa para ser manejada en el siguiente then
         })
         .then(data => {
             console.log(`logged ${email.value} ${password.value}`);

@@ -39,6 +39,7 @@
             <div class="color_option color4" @click="handleColor('YELLOW','color4')"></div>
             <div class="color_option color5" @click="handleColor('GREY','color5')"></div>
         </section>
+            <button @click="emit('logout')" id="logout_btn_mobile">Logout<i class="fa-solid fa-arrow-right-from-bracket"/></button>
         </div>
     </div>
 </template>
@@ -64,7 +65,7 @@ const states = ['Pending','Finished','Deleted']
 const handleClick = ()=>{
     console.log(fromDate.value+ " "+toDate.value +" " + fromTime.value + " " + toTime.value + " " + selectedCategories.value + " " +selectedState.value )
 }
-const emit = defineEmits(['close-navbar'])
+const emit = defineEmits(['close-navbar','logout'])
 
 const main_container = ref(null);
 
@@ -115,6 +116,21 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+#logout_btn_mobile{
+    width: 50%;
+    height: 35px;
+    font-family: var(--font1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    border: none;
+    border-radius: 8;
+    cursor: pointer;
+    margin-left: 25%!important;
+    margin-top: 10px!important;
+    background-color:rgb(236, 236, 236);
+}
 .color_select_c{
     margin-top: 20px!important;
     border-radius: 3px;
@@ -292,6 +308,9 @@ input{
     filter: grayscale(50%);
     cursor: pointer;
     transition: .5s all ease-in-out;
+}
+#logout_btn_mobile{
+    display: none;
 }
 
 }

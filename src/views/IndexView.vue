@@ -12,6 +12,8 @@
             :date="nextTask.date ?? 'No date available'"
             :id="nextTask.id ?? 'No id available'"
             :color="nextTask.color ?? 'No color avalaible'"
+            :userName="authClient.name ?? 'No username avalaible'"
+            @logout="logout"
             />
         </section>
         <TaskSection />
@@ -27,7 +29,9 @@
             @update-list="loadData"/>
         </div>
         <div v-if="navBarIsOpen == true">
-            <NavBarComponent  @close-navbar="toggleNavBar"/>  
+            <NavBarComponent  
+            @close-navbar="toggleNavBar"
+            @logout="logout"/>  
         </div>
         <div class="logo_social_c">
             <img src="../assets/logo.png" alt="">
@@ -48,6 +52,8 @@
 <script setup>
 import {ref,onMounted} from 'vue';
 import {onClickOutside} from '@vueuse/core'
+import Swal from 'sweetalert2'
+import router from '../router'
 import NextTaskComponent from '../components/NextTaskComponent.vue'
 import TaskSection from '../components/TaskSection.vue'
 import AddTaskForm from '../components/AddTaskForm.vue'
@@ -57,6 +63,7 @@ const addtaskIsOpen = ref(false);
 const navBarIsOpen = ref(true);
 const addTaskContainer = ref(null)
 const remainingTime = ref('')
+const authClient=ref([])
 
 const nextTask = ref(null)
 
@@ -70,7 +77,8 @@ const loadData = () => {
             }
         })
         .then(data => {
-            console.log(data)
+            authClient.value=data
+            console.log("auth "+ data)
             const now = new Date();
             let closestTask = null;
             let closestTimeDifference = Infinity;
@@ -106,9 +114,33 @@ const loadData = () => {
             console.error("Error al cargar los datos:", error);
         });
 }
+const logout =()=>{
+    Swal.fire(
+        {
+            title:'Logout',
+            showConfirmButton:true,
+            showDenyButton:true,
+            icon:'question'
+        },    
+    )
+    .then(result=>{
+        if(result.isConfirmed){
+        const url='http://localhost:8080/api/logout'
+        fetch(url,{method:'POST',credentials:'include'})
+        .then(res=>{
+        if(res.ok){
+            router.push('/')
+            return res
+        }else{
+            throw new Error('logout error')
+        }
+    })
+    .then(data=>console.log(data))
+    .catch(err=>console.log(err))
+        }
+    })
 
-
-
+}
 onMounted(()=>{
     loadData()
 })
@@ -116,7 +148,6 @@ onMounted(()=>{
 const handleResize = () => {
     navBarIsOpen.value = window.innerWidth > 1000;
 }
-
 handleResize();
 
 const toggleNavBar = ()=> {
