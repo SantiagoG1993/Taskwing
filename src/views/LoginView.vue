@@ -1,22 +1,12 @@
 <template>
-    <div class="login_c">
+    <div class="login_c  animate__animated animate__fadeIn">
         <section class="logo_c">
-            <img src="../assets/logo.png" alt="" id="logo">  
-            <h2>TASKWING</h2>
-            <h4>Turn your ideas into achievements</h4>
-                <section class="social_login_c">
-                <div class="container_login facebook">
-                    <i class="fa-brands fa-square-facebook"></i>
-                    <h3 id="login_text">Login with Facebook</h3>
-                </div>
-                <div class="container_login google">
-                    <i class="fa-brands fa-square-google-plus"></i>
-                    <h3 id="login_text">Login with Google</h3>
-                </div>
-                </section>
+            <img src="../assets/logo.png" alt="" id="logo" class=" animate__animated animate__fadeInDown">  
+            <h2 class=" animate__animated animate__fadeInUp">TASKWING</h2>
+            <h4 class=" animate__animated animate__fadeInLeft">Turn your ideas into achievements</h4>
         </section>
         <!-- Container derecho -->
-        <section class="right_c">
+        <section class="right_c animate__animated animate__fadeInRight">
             <div class="user_title_c">
                 <img src="../assets/user.png" alt="" id="user_img">
                 <h1 id="user_title">User login</h1>
@@ -39,7 +29,7 @@
                 </div>
             </div>
             
-        <div class="btn_c">
+        <div class="btn_c  animate__animated animate__fadeInUp">
             <button id="login_btn" @click="login">Login</button>
             <p>Create account</p>
         </div>
@@ -50,8 +40,10 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import {ref,onMounted} from 'vue'
 import router from '../router'
+import WOW from 'wow.js'
+import 'animate.css'
 
 const email = ref('')
 const password = ref('')
@@ -74,7 +66,14 @@ const login = () => {
         .catch(err => console.error('Error fetching data:', err)); // Captura y maneja los errores
 }
 
-
+onMounted(()=>{
+    const wow = new WOW(
+        {
+            duration:'0.3s'
+        }
+    )
+    wow.init();
+})
 </script>
 ``
 <style scoped>
@@ -84,7 +83,7 @@ const login = () => {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    justify-content: space-around;
+    justify-content: center;
 }
 .logo_c{
     display: flex;
@@ -164,7 +163,7 @@ i{
 /* CONTENEDOR DERECHO LOGIN */
 .input_c{
     width: 80%;
-    height: 45px;
+    height: 55px;
     border: 1px solid #E1E1E1;
     background-color: white;
     border-radius: 4px;

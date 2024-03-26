@@ -109,6 +109,7 @@ onMounted(()=>{
 
 .addTask_main_container{
     width: 100%;
+    animation: slideInDown 0.3s;
     height: 100vh;
     z-index: 1000;
     background-color: var(--color1);

@@ -181,6 +181,7 @@ onMounted(()=>{
     border: 1px solid white;
 }
 .nav_main_container{
+    animation: fadeInLeft 0.3s;
     user-select: none;
     position: fixed;
     top: 0px;

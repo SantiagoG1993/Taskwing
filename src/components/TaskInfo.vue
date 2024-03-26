@@ -80,7 +80,7 @@ const getColor = (colorValue) => {
     position: relative;
     flex-direction: column;
     align-items: center;
-    z-index: 3;
+    z-index: 5;
 }
 .upper_menu{
     height: 60px;
@@ -128,6 +128,7 @@ const getColor = (colorValue) => {
     color: white;
     font-family: var(--font2);
     margin-top: 20px!important;
+    animation: slideInUp 0.3s
 }
 #time, #date, #category{
     display: flex;

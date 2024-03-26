@@ -1,5 +1,5 @@
 <template>
-    <div  class="main_container_next_task ">
+    <div  class="main_container_next_task">
         <p id="welcome">Bienvenido/a {{props.userName}}<i class="fa-solid fa-arrow-right-from-bracket" @click="emit('logout')"></i></p>
         <h3 id="title"><i class="fa-solid fa-clock clock1"></i>Next task in: <span id="watch">{{props.remaining}}</span></h3>
         <div class="nextTask_c" :style="{backgroundColor : getColor(props.color)}" @mouseover="subPanelIsOpen = true" @mouseleave="subPanelIsOpen = false" @click="openTaskInfo" >
@@ -162,6 +162,7 @@ const finishTask = (id)=>{
     flex-direction: column;
     align-items: center;
     gap: 2px;
+    animation: fadeInDown 0.3s;
 }
 .nextTask_c{
     user-select: none;

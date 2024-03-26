@@ -1,5 +1,5 @@
 <template>
-    <div class="main_component"> 
+    <div class="main_component "> 
             <hr>
         <div class="filters_c">
             <label for="select_category" id_cat>Category</label>
@@ -69,6 +69,7 @@ import {ref, onMounted,computed} from 'vue'
 import ClientService from '../services/ClientService'
 import { useStore } from 'vuex';
 import Task from '../components/Task.vue'
+
 
 const todayIsOpen = ref(true)
 const tomorrowIsOpen = ref(true)

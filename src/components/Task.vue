@@ -8,7 +8,7 @@
                 <h3 id="category"><i class="fa-solid fa-star"></i>{{props.category}}</h3>
         </section>
     </div>
-        <div v-if="subPanelIsOpen == true" class="subpanel" @mouseover="handleMouse (true)" :style="{ backgroundColor: getColor(props.color) }"  >
+        <div v-if="subPanelIsOpen == true" class="subpanel " @mouseover="handleMouse (true)" :style="{ backgroundColor: getColor(props.color) }"  >
             <i class="fa-solid fa-pencil" @click="editTaskIsOpen = true"></i>
             <i class="fa-solid fa-flag-checkered" @click="finishTask(props.id)"></i>
             <i class="fa-solid fa-trash" @click="deleteTask(props.id)"></i>
@@ -164,6 +164,7 @@ const handleMouse = (boolean) => {
     display: flex;
     justify-content: center;
     align-content: center;
+    animation: fadeInDown 0.3s;
 }
 .task_container{
     margin-bottom: 20px!important;

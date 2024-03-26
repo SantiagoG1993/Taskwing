@@ -33,7 +33,7 @@
             @close-navbar="toggleNavBar"
             @logout="logout"/>  
         </div>
-        <div class="logo_social_c">
+        <div class="logo_social_c wow animate__animated animate__fadeInUp">
             <img src="../assets/logo.png" alt="">
             <p id="taskwing_logo">TASKWING</p>
             <p id="slogan">Turn your ideas into achievements</p>
@@ -58,6 +58,7 @@ import NextTaskComponent from '../components/NextTaskComponent.vue'
 import TaskSection from '../components/TaskSection.vue'
 import AddTaskForm from '../components/AddTaskForm.vue'
 import NavBarComponent from '../components/NavBarComponent.vue'
+import WOW from 'wow.js'
 
 const addtaskIsOpen = ref(false);
 const navBarIsOpen = ref(true);
@@ -142,7 +143,13 @@ const logout =()=>{
 
 }
 onMounted(()=>{
-    loadData()
+    const wow = new WOW(
+        {
+            duration:'0.3s'
+        }
+    )
+    wow.init();
+    loadData();
 })
 
 const handleResize = () => {
