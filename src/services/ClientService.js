@@ -1,31 +1,35 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-class ClientService {
-    client;
+const API_URL = 'http://localhost:8080/api/'
 
-    constructor(){
-        this.client = ref([])
+    const ClientService = {
+    authClient:ref([]),
+    categories:ref([]),
+
+    getAuthClient(){
+        fetch(`${API_URL}client/auth`,{method:'GET',credentials:'include'})
+        .then(res=>{
+            if(!res.ok){
+                throw new Error('error fetchin auth client')
+            }else return res.json()
+        })
+        .then(data=>{
+            console.log(data)
+            this.authClient.value=data;
+        })
+    },
+
+    getCategories(){
+        fetch(`${API_URL}categories`,{method:'GET',credentials:'include'})
+        .then(res=>{
+            if(!res.ok){
+                throw new Error('error fetching categories')
+            }else return res.json()
+        })
+        .then(data=>{   
+            console.log(data)
+            this.categories.value = data
+        })
     }
-
-    getClient(){
-        return this.client
-    }
-
-
-    async fetchAll(){
-        try{
-            const url = 'http://localhost:8080/api/client/auth'
-        await fetch(url,{method:"GET",credentials: 'include'})
-        .then(res=>res.json())
-        .then(data=> {
-            this.client.value = data.taskList
-        }
-)
-        }catch(error){
-            console.log(error)
-        }
-
-    }
-
 }
 export default ClientService

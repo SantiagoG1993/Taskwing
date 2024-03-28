@@ -9,18 +9,23 @@
         <section class="right_c animate__animated animate__fadeInRight">
             <div class="user_title_c">
                 <img src="../assets/user.png" alt="" id="user_img">
-                <h1 id="user_title">User login</h1>
+                <h1 id="user_title" v-if="isVisibleRegister == false">User login</h1>
+                <h1 v-else id="user_title" class="animate__animated animate__fadeIn">User Register</h1>
             </div>
             <div class="input_main_c">
                 <div class="input_c">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="" id="" placeholder="Email"  class="input" v-model="email" >
+                    <input type="email" name="" id="" placeholder="Email"  class="input" v-model="email">
                 </div>
                 <div class="input_c">
                     <i class="fa-solid fa-key"></i>
                     <input type="password" name="" id="" placeholder="Password" class="input" v-model="password">
                 </div>
-                <div class="forgotp_remember_c">
+                <div class="input_c animate__animated animate__fadeIn" v-if="isVisibleRegister">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="password" name="" id="" placeholder="Confirm password" class="input" v-model="confirmPassword">
+                </div>
+                <div class="forgotp_remember_c" v-if="isVisibleRegister == false">
                     <div id="remember_c">
                         <input type="checkbox">
                         <p id="remember">Remeber me</p>
@@ -30,8 +35,10 @@
             </div>
             
         <div class="btn_c  animate__animated animate__fadeInUp">
-            <button id="login_btn" @click="login">Login</button>
-            <p>Create account</p>
+            <button id="login_btn" @click="login" v-if="isVisibleRegister == false">Login</button>
+            <button v-else id="login_btn" @click="register">Register</button>
+            <p @click="isVisibleRegister = true" v-if="isVisibleRegister == false">Create account</p>
+            <p  @click="isVisibleRegister = false" v-else>Back to login</p>
         </div>
         </section>
     
@@ -43,29 +50,23 @@
 import {ref,onMounted} from 'vue'
 import router from '../router'
 import WOW from 'wow.js'
+import AuthService from '../services/AuthService'
 import 'animate.css'
 
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
+const isVisibleRegister = ref(false)
+
 
 const emit=defineEmits(['close-login-view'])
 
 const login = () => {
-    const url = `http://localhost:8080/api/login?email=${email.value}&password=${password.value}`;
-    fetch(url, { method: "POST", credentials: 'include' })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return res;
-        })
-        .then(data => {
-            console.log(`logged ${email.value} ${password.value}`);
-            router.push('/index');
-        })
-        .catch(err => console.error('Error fetching data:', err)); // Captura y maneja los errores
+    AuthService.login(email.value,password.value)
 }
-
+const register=()=>{
+    AuthService.registerClient(email.value,password.value,confirmPassword.value)
+}
 onMounted(()=>{
     const wow = new WOW(
         {

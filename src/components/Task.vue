@@ -36,10 +36,15 @@ import {ref,defineProps,defineEmits} from 'vue'
 import Swal from 'sweetalert2'
 import TaskInfo from '../components/TaskInfo.vue'
 import EditTask from '../components/EditTask.vue'
+import TaskServices from '@/services/TaskService'
 
 const emit = defineEmits(['delete-task','finish-task'])
+const deleteTask = (id) =>{
+    TaskServices.deleteTask(id)
+/*     emit('delete-task',id) */
+}
 
-const deleteTask = (id) => {
+/* const deleteTask = (id) => {
     Swal.fire(
         {
             title:"Delete task?",
@@ -70,35 +75,12 @@ const deleteTask = (id) => {
         }
     )
             
-        }
+        } */
 
 
 const finishTask = (id)=>{
-    Swal.fire(
-        {
-            title:'Finish this task?',
-            icon:'question',
-            showDenyButton:true,
-            showConfirmButton:true,
-            denyButtonText:'Cancel'
-        }
-    )
-    .then(
-        (result)=>{
-            if(result.isConfirmed){
-                const url=`http://localhost:8080/api/task/finish?id=${id}`;
-                const options = {method:'PUT'}
-                fetch(url,options)
-                .then(res=>console.log(res))
-                .then(data=>emit('finish-task'))
-                .catch(err=>console.log(err))
-                Swal.fire('Task finished','','success')
-            }else if(result.isDenied){
-                Swal.fire('Cancelled','','info')
-            }
-        }
-    )
-    
+    TaskServices.finishTask(id)
+    emit('finish-task')
         }      
 
 const color ={

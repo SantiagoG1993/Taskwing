@@ -52,6 +52,7 @@
 <script setup>
 import {ref,onMounted} from 'vue';
 import {onClickOutside} from '@vueuse/core'
+import AuthService from '../services/AuthService'
 import Swal from 'sweetalert2'
 import router from '../router'
 import NextTaskComponent from '../components/NextTaskComponent.vue'
@@ -79,7 +80,7 @@ const loadData = () => {
         })
         .then(data => {
             authClient.value=data
-            console.log("auth "+ data)
+            console.log(data)
             const now = new Date();
             let closestTask = null;
             let closestTimeDifference = Infinity;
@@ -116,40 +117,16 @@ const loadData = () => {
         });
 }
 const logout =()=>{
-    Swal.fire(
-        {
-            title:'Logout',
-            showConfirmButton:true,
-            showDenyButton:true,
-            icon:'question'
-        },    
-    )
-    .then(result=>{
-        if(result.isConfirmed){
-        const url='http://localhost:8080/api/logout'
-        fetch(url,{method:'POST',credentials:'include'})
-        .then(res=>{
-        if(res.ok){
-            router.push('/')
-            return res
-        }else{
-            throw new Error('logout error')
-        }
-    })
-    .then(data=>console.log(data))
-    .catch(err=>console.log(err))
-        }
-    })
-
-}
+    AuthService.logout()
+} 
 onMounted(()=>{
+    loadData();
     const wow = new WOW(
         {
             duration:'0.3s'
         }
     )
     wow.init();
-    loadData();
 })
 
 const handleResize = () => {

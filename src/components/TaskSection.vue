@@ -12,53 +12,54 @@
         <h2  @click="handleToday" class="today">Today <i v-if="todayIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="todayIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="todayIsOpen == true && tasksFromToday.length >0 ">
             <Task v-for="task in tasksFromToday" 
-            :key="task.id"
-            :category="task.category"
-            :state="task.state"
-            :id="task.id" 
-            :taskName="task.taskName" 
-            :time="task.time" 
-            :date="task.date" 
-            :color="task.color"
-            :description="task.description"
-            @delete-task="actualizarTaskList(task.id)"
+            :key="task.id ?? 'id is not available'"
+            :category="task.category ?? 'category is not available'"
+            :state="task.state ?? 'state is not available'"
+            :id="task.id ?? 'id is not available'" 
+            :taskName="task.taskName ?? 'name is not available'" 
+            :time="task.time ?? 'time is not available'" 
+            :date="task.date ?? 'date is not available'" 
+            :color="task.color ?? 'color is not available'"
+            :description="task.description ?? 'description is not available'"
+            @delete-task="actualizarTaskList(task.id) "
             @finish-task="actualizarTaskListFinished(task.id)"
-                        />
+            />
             
         </div>
         <hr>
         <h2 @click="handleTomorrow" class="today">Tomorrow <i v-if="tomorrowIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="tomorrowIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="tomorrowIsOpen == true  && tasksFromTomorrow.length >0">
             <Task v-for="task in tasksFromTomorrow" 
-            :key="task.id" 
-            :category="task.category"
-            :state="task.state"
-            :id="task.id" 
-            :taskName="task.taskName" 
-            :time="task.time" 
-            :date="task.date" 
-            :color="task.color"
-            :description="task.description"
-            @delete-task="actualizarTaskList(task.id)"
-            @finish-task="actualizarTaskListFinished(task.id)"            
-            />
+            :key="task.id ?? 'id is not available'"
+            :category="task.category ?? 'category is not available'"
+            :state="task.state ?? 'state is not available'"
+            :id="task.id ?? 'id is not available'" 
+            :taskName="task.taskName ?? 'name is not available'" 
+            :time="task.time ?? 'time is not available'" 
+            :date="task.date ?? 'date is not available'" 
+            :color="task.color ?? 'color is not available'"
+            :description="task.description ?? 'description is not available'"
+            @delete-task="actualizarTaskList(task.id) "
+            @finish-task="actualizarTaskListFinished(task.id)"
+            />          
+            
         </div>
         <hr>
         <h2  @click="handleOther" class="today">Other <i v-if="otherIsOpen == true" class="fa-solid fa-minus plus_minus_i"></i> <i v-if="otherIsOpen == false" class="fa-solid fa-plus plus_minus_i"></i></h2>
         <div class="today_c" v-if="otherIsOpen == true && otherTasks.length >0" > 
             <Task v-for="task in otherTasks" 
-            :key="task.id"
-            :category="task.category"
-            :state="task.state" 
-            :id="task.id" 
-            :taskName="task.taskName" 
-            :time="task.time" 
-            :date="task.date" 
-            :color="task.color"
-            :description="task.description"
-            @delete-task="actualizarTaskList(task.id)"
+            :key="task.id ?? 'id is not available'"
+            :category="task.category ?? 'category is not available'"
+            :state="task.state ?? 'state is not available'"
+            :id="task.id ?? 'id is not available'" 
+            :taskName="task.taskName ?? 'name is not available'" 
+            :time="task.time ?? 'time is not available'" 
+            :date="task.date ?? 'date is not available'" 
+            :color="task.color ?? 'color is not available'"
+            :description="task.description ?? 'description is not available'"
+            @delete-task="actualizarTaskList(task.id) "
             @finish-task="actualizarTaskListFinished(task.id)"
-            />           
+            />        
         </div>
         {{filterData.fromDate}}
     </div>
@@ -66,9 +67,9 @@
 
 <script setup>
 import {ref, onMounted,computed} from 'vue'
-import ClientService from '../services/ClientService'
 import { useStore } from 'vuex';
 import Task from '../components/Task.vue'
+import ClientService from '../services/ClientService'
 
 
 const todayIsOpen = ref(true)
@@ -151,16 +152,12 @@ let filteredeByColor = filteredByState.filter(t=>{
 return filteredeByColor;
 }) 
 
-
-
 const store = useStore();
 
 const filterData = computed(()=>{
     console.log(store.getters.getData)
     return store.getters.getData
 })
-
-
 
 const actualizarTaskList = (id)=>{
     clientTaskList.value = clientTaskList.value.filter(task => task.id !== id && !task.deleted);
@@ -169,12 +166,6 @@ const actualizarTaskListFinished = (taskId) => {
 
     clientTaskList.value = clientTaskList.value.filter(task => task.id !== taskId);
 }
-
-
-
-
-
-
 
 const tasksFromToday = computed(() => {
     const {state} =filterData.value
@@ -218,20 +209,21 @@ const otherTasks = computed(() => {
 });
 
 
-const service = new ClientService()
-
-onMounted( async ()=>{
-await service.fetchAll()
-.then(()=>{
-    clientTaskList.value = service.getClient()._value
-    console.log(service.getClient()._value)
-    return service.getClient;
-})
-const url = 'http://localhost:8080/api/categories'
-    fetch(url)
-    .then(res=>res.json())
-    .then(data=>categories.value=data)
+onMounted(()=>{
+    fetch('http://localhost:8080/api/client/auth',{method:'GET',credentials:'include'})
+    .then(res=>{
+        if(!res.ok){
+            throw new Error('error fetching ')
+        }else return res.json()
+    })
+    .then(data=>{
+        console.log(data)
+        clientTaskList.value = data.taskList
+    })
     .catch(err=>console.log(err))
+
+    ClientService.getCategories();
+    categories.value  = ClientService.categories.value
 })
 
 const handleToday = ()=>{
